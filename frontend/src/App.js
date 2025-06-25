@@ -1,24 +1,92 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import Home from './pages/Home';
 import AddEmployee from './pages/AddEmployee';
 import EditEmployee from './pages/EditEmployee';
 import ViewEmployee from './pages/ViewEmployee';
+import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
+import Footer from './components/Footer';
+import './App.css';
 
-function App() {
+const AppContent = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+
   return (
-    <Router>
-      <div className="container mt-4">
-        <h2 className="text-center mb-4">👨‍💼 Employee Management System</h2>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/add" element={<AddEmployee />} />
-          <Route path="/edit/:id" element={<EditEmployee />} />
-          <Route path="/view/:id" element={<ViewEmployee />} />
-        </Routes>
+    <div className="app-container d-flex">
+      <Sidebar isOpen={sidebarOpen} closeSidebar={() => setSidebarOpen(false)} />
+      <div className={`main-content flex-grow-1 ${sidebarOpen ? 'sidebar-open' : ''}`}>
+        <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+        <div className="container mt-4">
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route
+                path="/"
+                element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Home />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/add"
+                element={
+                  <motion.div
+                    initial={{ x: 300, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: -300, opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <AddEmployee />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/edit/:id"
+                element={
+                  <motion.div
+                    initial={{ x: 300, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: -300, opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <EditEmployee />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/view/:id"
+                element={
+                  <motion.div
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.9, opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <ViewEmployee />
+                  </motion.div>
+                }
+              />
+            </Routes>
+          </AnimatePresence>
+        </div>
+        <Footer />
       </div>
-    </Router>
+    </div>
   );
-}
+};
+
+const App = () => (
+  <Router>
+    <AppContent />
+  </Router>
+);
 
 export default App;
