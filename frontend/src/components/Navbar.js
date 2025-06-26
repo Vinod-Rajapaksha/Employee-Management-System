@@ -38,13 +38,7 @@ const Navbar = ({ toggleSidebar }) => {
         </motion.button>
           
         <Link to="/" className="logo">
-          <motion.div 
-            className="logo-icon"
-            whileHover={{ rotate: 360 }}
-            transition={{ duration: 0.6 }}
-          >
             🏢
-          </motion.div>
           <span>Employee Management System</span>
         </Link>
       </div>

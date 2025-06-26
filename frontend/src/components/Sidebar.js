@@ -38,7 +38,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
             initial={{ x: -300 }}
             animate={{ x: 0 }}
             exit={{ x: -300 }}
-            transition={{ type: "spring", damping: 25 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
             className="sidebar glass-card"
           >
             <div className="sidebar-header">
