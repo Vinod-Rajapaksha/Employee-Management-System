@@ -23,6 +23,8 @@
   --gray-700: #374151;
   --gray-800: #1f2937;
   --gray-900: #111827;
+
+  --text-color: var(--gray-900);
   
   /* Glassmorphism effects */
   --glass-bg: rgba(255, 255, 255, 0.25);
@@ -73,6 +75,43 @@
   --glass-bg: rgba(15, 23, 42, 0.8);
   --glass-border: rgba(148, 163, 184, 0.1);
   --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+
+  --text-color: var(--gray-800);
+}
+
+[data-theme="dark"] .modern-form-control {
+  background: var(--gray-100);
+  color: var(--gray-800);
+  border-color: var(--gray-600);
+}
+
+[data-theme="dark"] .modern-form-control::placeholder {
+  color: var(--gray-400);
+}
+
+[data-theme="dark"] .modern-table td,
+[data-theme="dark"] .modern-table th {
+  color: var(--gray-100);
+}
+
+[data-theme="dark"] .modern-table {
+  background: var(--gray-100);
+}
+
+[data-theme="dark"] .modern-table tbody tr:hover {
+  background: var(--gray-200);
+}
+
+[data-theme="dark"] .text-muted {
+  color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .bg-dark {
+  background: var(--gray-100) !important;
+}
+
+[data-theme="dark"] .fw-medium {
+  color: var(--text-color) !important;
 }
 
 /* Base styles */
@@ -85,7 +124,7 @@
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
-  color: var(--gray-900);
+  color: var(--text-color, var(--gray-900));
   line-height: 1.6;
   transition: var(--transition-medium);
   min-height: 100vh;

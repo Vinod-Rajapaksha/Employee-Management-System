@@ -297,7 +297,7 @@ const deleteEmployee = async (id) => {
                           <Link
                             to={`/view/${emp._id}`}
                             className="text-decoration-none fw-bold"
-                            style={{ color: "var(--gray-900)" }}
+                            style={{ color: "var(--text-color)" }}
                           >
                             {emp.name}
                           </Link>
