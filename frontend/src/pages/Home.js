@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ToastContainer, toast } from 'react-toastify';
-import { FiSearch, FiFilter, FiPlus, FiEye, FiEdit, FiTrash2, FiUsers, FiTrendingUp } from 'react-icons/fi';
+import { FiSearch, FiPlus, FiFilter, FiArrowUp, FiEye, FiEdit, FiTrash2, FiUsers, FiTrendingUp } from 'react-icons/fi';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Home() {
@@ -17,6 +17,21 @@ function Home() {
     newThisMonth: 0
   });
   const navigate = useNavigate();
+
+  const [showGoTop, setShowGoTop] = useState(false);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowGoTop(window.scrollY > 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const getEmployees = async () => {
     setIsLoading(true);
@@ -164,7 +179,7 @@ function Home() {
       >
         <div className="row">
           <div className="col-md-8 mb-3">
-            <div className="input-group">
+            <div className="input-group input-group-nowrap">
               <span className="input-group-text">
                 <FiSearch size={18} />
               </span>
@@ -185,9 +200,9 @@ function Home() {
               onChange={(e) => setFilterDepartment(e.target.value)}
               aria-label="Filter by department"
             >
-              {departments.map(dept => (
+              {departments.map((dept) => (
                 <option key={dept} value={dept}>
-                  {dept === 'all' ? '🏢 All Departments' : `🏢 ${dept}`}
+                  {dept === "all" ? "🏢 All Departments" : `🏢 ${dept}`}
                 </option>
               ))}
             </select>
@@ -210,12 +225,14 @@ function Home() {
             <p className="text-muted">Loading employees...</p>
           </div>
         ) : filteredEmployees.length === 0 ? (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center py-5"
           >
-            <div className="mb-3" style={{ fontSize: '4rem' }}>👥</div>
+            <div className="mb-3" style={{ fontSize: "4rem" }}>
+              👥
+            </div>
             <h4 className="text-muted">No employees found</h4>
             <p className="text-muted">Try adjusting your search criteria</p>
           </motion.div>
@@ -234,7 +251,7 @@ function Home() {
               </thead>
               <tbody>
                 {filteredEmployees.slice(0, 20).map((emp, index) => (
-                  <motion.tr 
+                  <motion.tr
                     key={emp._id}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -243,14 +260,21 @@ function Home() {
                     <td className="fw-bold text-primary">{index + 1}</td>
                     <td>
                       <div className="d-flex align-items-center">
-                        <div className="avatar-gradient me-3" style={{ width: '40px', height: '40px', fontSize: '16px' }}>
+                        <div
+                          className="avatar-gradient me-3"
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            fontSize: "16px",
+                          }}
+                        >
                           {emp.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <Link 
-                            to={`/view/${emp._id}`} 
+                          <Link
+                            to={`/view/${emp._id}`}
                             className="text-decoration-none fw-bold"
-                            style={{ color: 'var(--gray-900)' }}
+                            style={{ color: "var(--gray-900)" }}
                           >
                             {emp.name}
                           </Link>
@@ -270,22 +294,22 @@ function Home() {
                     </td>
                     <td>
                       <div className="d-flex gap-2">
-                        <Link 
-                          to={`/view/${emp._id}`} 
+                        <Link
+                          to={`/view/${emp._id}`}
                           className="btn-modern btn-primary btn-sm"
                           title="View Details"
                         >
                           <FiEye size={14} />
                         </Link>
-                        <Link 
-                          to={`/edit/${emp._id}`} 
+                        <Link
+                          to={`/edit/${emp._id}`}
                           className="btn-modern btn-secondary btn-sm"
                           title="Edit Employee"
                         >
                           <FiEdit size={14} />
                         </Link>
-                        <button 
-                          onClick={() => deleteEmployee(emp._id)} 
+                        <button
+                          onClick={() => deleteEmployee(emp._id)}
                           className="btn-modern btn-danger btn-sm"
                           title="Delete Employee"
                           aria-label={`Delete ${emp.name}`}
@@ -302,8 +326,8 @@ function Home() {
         )}
       </motion.div>
 
-      <ToastContainer 
-        position="bottom-right" 
+      <ToastContainer
+        position="bottom-right"
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -314,10 +338,15 @@ function Home() {
         pauseOnHover
         theme="light"
       />
+
+      <button
+        className={`fab ${showGoTop ? "" : "fab-hidden"}`}
+        onClick={scrollToTop}
+        aria-label="Go to top"
+      >
+        <FiArrowUp size={24} />
+      </button>
       
-      <Link to="/add" className="fab" aria-label="Add new employee">
-        <FiPlus size={24} />
-      </Link>
     </div>
   );
 }

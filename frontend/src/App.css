@@ -207,7 +207,7 @@ body {
   font-size: 16px;
   font-weight: 500;
   transition: var(--transition-fast);
-  outline: none;
+  outline: none
 }
 
 .modern-form-control:focus {
@@ -280,14 +280,9 @@ body {
 }
 
 .modern-table td a {
-  color: var(--primary);
   text-decoration: none;
   font-weight: 600;
   transition: var(--transition-fast);
-}
-
-.modern-table td a:hover {
-  color: var(--primary-dark);
 }
 
 /* Floating action button */
@@ -309,6 +304,7 @@ body {
   transition: var(--transition-medium);
   cursor: pointer;
   text-decoration: none;
+  opacity: 1;
 }
 
 .fab:hover {
@@ -320,6 +316,12 @@ body {
 .fab:active {
   transform: translateY(0) scale(0.95);
 }
+
+.fab-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 
 /* Avatar gradient */
 .avatar-gradient {
@@ -488,7 +490,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.10);
   z-index: 999;
   backdrop-filter: blur(5px);
 }
@@ -617,12 +619,14 @@ body {
 /* Input group with floating label */
 .input-group {
   position: relative;
-  margin-bottom: 24px;
+}
+
+.input-group-nowrap {
+  flex-wrap: nowrap !important;
 }
 
 .input-group input {
   width: 100%;
-  padding: 20px 16px 8px;
   border: 2px solid var(--gray-200);
   border-radius: var(--radius-md);
   background: var(--gray-50);
@@ -661,13 +665,12 @@ body {
   background: var(--gray-100);
   border: 2px solid var(--gray-200);
   border-right: none;
-  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  border-radius: var(--radius-md) 0 0 var(--radius-md) !important;
   padding: 16px 20px;
   color: var(--gray-500);
 }
 
 .input-group .modern-form-control {
-  border-left: none;
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
@@ -836,7 +839,7 @@ footer {
 
 /* Content spacing */
 .container {
-  padding-top: 100px;
+  padding-top: 20px;
   padding-bottom: 2rem;
 }
 
@@ -867,7 +870,6 @@ footer {
   content: '';
   position: absolute;
   bottom: 0;
-  /* right: 0; */
   width: 12px;
   height: 12px;
   background: var(--success);

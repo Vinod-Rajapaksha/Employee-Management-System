@@ -58,7 +58,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                       className={`nav-link ${location.pathname === item.path ? "active" : ""}`}
                       onClick={closeSidebar}
                     >
-                      <span className="nav-icon">{item.icon}</span>
+                      <span className="nav-icon ms-2">{item.icon}</span>
                       <span className="nav-label">{item.label}</span>
                     </Link>
                   </motion.li>
