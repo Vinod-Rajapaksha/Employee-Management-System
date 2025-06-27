@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
-import { FiUser, FiMail, FiPhone, FiBriefcase, FiHome, FiCalendar, FiSave, FiArrowLeft } from 'react-icons/fi';
+import { FiUser, FiMail, FiPhone, FiArrowUp, FiBriefcase, FiHome, FiCalendar, FiSave, FiArrowLeft } from 'react-icons/fi';
 
 function AddEmployee() {
   const [formData, setFormData] = useState({
@@ -18,6 +18,22 @@ function AddEmployee() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  const [showGoTop, setShowGoTop] = useState(false);
+  
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+  
+    useEffect(() => {
+      const handleScroll = () => {
+        setShowGoTop(window.scrollY > 100);
+      };
+  
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+  
 
   const departments = [
     'Engineering',
@@ -165,7 +181,7 @@ function AddEmployee() {
         className="d-flex align-items-center mb-4"
       >
         <motion.button
-          onClick={() => navigate('/')}
+          onClick={() => navigate("/")}
           className="btn-modern btn-secondary me-3"
           whileHover={{ scale: 1.05, x: -2 }}
           whileTap={{ scale: 0.95 }}
@@ -175,7 +191,9 @@ function AddEmployee() {
         </motion.button>
         <div>
           <h2 className="gradient-text mb-1">Add New Employee</h2>
-          <p className="text-muted mb-0">Fill in the details to add a new team member</p>
+          <p className="text-muted mb-0">
+            Fill in the details to add a new team member
+          </p>
         </div>
       </motion.div>
 
@@ -194,12 +212,14 @@ function AddEmployee() {
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
                 className="avatar-gradient mx-auto mb-3"
-                style={{ width: '60px', height: '60px', fontSize: '24px' }}
+                style={{ width: "60px", height: "60px", fontSize: "24px" }}
               >
                 <FiUser size={24} />
               </motion.div>
               <h4 className="fw-bold text-dark">Employee Information</h4>
-              <p className="text-muted small">Please provide accurate information for the new employee</p>
+              <p className="text-muted small">
+                Please provide accurate information for the new employee
+              </p>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -273,7 +293,7 @@ function AddEmployee() {
               </div>
 
               {/* Action Buttons */}
-              <motion.div 
+              <motion.div
                 className="d-flex gap-3 justify-content-end mt-5 pt-3"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -281,7 +301,7 @@ function AddEmployee() {
               >
                 <motion.button
                   type="button"
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate("/")}
                   className="btn-modern btn-secondary px-4"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -290,7 +310,7 @@ function AddEmployee() {
                   <FiArrowLeft size={16} className="me-2" />
                   Cancel
                 </motion.button>
-                
+
                 <motion.button
                   type="submit"
                   className="btn-modern btn-primary px-4"
@@ -300,10 +320,10 @@ function AddEmployee() {
                 >
                   {isSubmitting ? (
                     <>
-                      <div 
-                        className="spinner-border spinner-border-sm me-2" 
+                      <div
+                        className="spinner-border spinner-border-sm me-2"
                         role="status"
-                        style={{ width: '16px', height: '16px' }}
+                        style={{ width: "16px", height: "16px" }}
                       >
                         <span className="visually-hidden">Loading...</span>
                       </div>
@@ -334,13 +354,22 @@ function AddEmployee() {
             <div className="d-flex align-items-center text-muted">
               <FiUser size={16} className="me-2" />
               <small>
-                <strong>Note:</strong> All fields marked with * are required. 
-                The employee will receive a welcome email after successful registration.
+                <strong>Note:</strong> All fields marked with * are required.
+                The employee will receive a welcome email after successful
+                registration.
               </small>
             </div>
           </div>
         </div>
       </motion.div>
+
+      <button
+        className={`fab ${showGoTop ? "" : "fab-hidden"}`}
+        onClick={scrollToTop}
+        aria-label="Go to top"
+      >
+        <FiArrowUp size={24} />
+      </button>
     </div>
   );
 }

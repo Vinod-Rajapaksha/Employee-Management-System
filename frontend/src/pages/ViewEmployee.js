@@ -4,19 +4,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
-import { 
-  FiUser, 
-  FiMail, 
-  FiPhone, 
-  FiBriefcase, 
-  FiHome, 
-  FiCalendar, 
-  FiArrowLeft, 
-  FiEdit, 
-  FiTrash2,
-  FiClock,
-  FiAward
-} from 'react-icons/fi';
+import { FiUser, FiMail, FiArrowUp, FiPhone, FiBriefcase, FiHome, FiCalendar, FiArrowLeft, FiEdit, FiTrash2,FiClock,FiAward} from 'react-icons/fi';
 import 'react-toastify/dist/ReactToastify.css';
 
 function ViewEmployee() {
@@ -25,6 +13,22 @@ function ViewEmployee() {
   const [isDeleting, setIsDeleting] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const [showGoTop, setShowGoTop] = useState(false);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowGoTop(window.scrollY > 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
 
   useEffect(() => {
     const fetchEmployee = async () => {
@@ -174,7 +178,7 @@ function ViewEmployee() {
       >
         <div className="d-flex align-items-center">
           <motion.button
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="btn-modern btn-secondary me-3"
             whileHover={{ scale: 1.05, x: -2 }}
             whileTap={{ scale: 0.95 }}
@@ -183,15 +187,14 @@ function ViewEmployee() {
           </motion.button>
           <div>
             <h2 className="gradient-text mb-1">Employee Profile</h2>
-            <p className="text-muted mb-0">View and manage employee information</p>
+            <p className="text-muted mb-0">
+              View and manage employee information
+            </p>
           </div>
         </div>
-        
+
         <div className="d-flex gap-2">
-          <Link 
-            to={`/edit/${employee._id}`} 
-            className="btn-modern btn-primary"
-          >
+          <Link to={`/edit/${employee._id}`} className="btn-modern btn-primary">
             <FiEdit size={16} className="me-2" />
             Edit Profile
           </Link>
@@ -204,7 +207,10 @@ function ViewEmployee() {
           >
             {isDeleting ? (
               <>
-                <div className="spinner-border spinner-border-sm me-2" role="status">
+                <div
+                  className="spinner-border spinner-border-sm me-2"
+                  role="status"
+                >
                   <span className="visually-hidden">Loading...</span>
                 </div>
                 Deleting...
@@ -222,7 +228,7 @@ function ViewEmployee() {
       <div className="row">
         {/* Profile Card */}
         <div className="col-lg-4 mb-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
@@ -233,11 +239,11 @@ function ViewEmployee() {
               animate={{ scale: 1 }}
               transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
               className="avatar-gradient mb-4 mx-auto status-online"
-              style={{ width: '120px', height: '120px', fontSize: '48px' }}
+              style={{ width: "120px", height: "120px", fontSize: "48px" }}
             >
               {employee.name.charAt(0).toUpperCase()}
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -260,14 +266,15 @@ function ViewEmployee() {
               <div className="d-flex justify-content-center align-items-center text-muted">
                 <FiClock size={16} className="me-2" />
                 <small>
-                  <strong>Employment Duration:</strong><br />
+                  <strong>Employment Duration:</strong>
+                  <br />
                   {calculateEmploymentDuration(employee.hireDate)}
                 </small>
               </div>
             </motion.div>
           </motion.div>
         </div>
-        
+
         {/* Details Section */}
         <div className="col-lg-8">
           <motion.div
@@ -321,24 +328,36 @@ function ViewEmployee() {
                 <FiAward size={20} className="me-2 text-primary" />
                 Employment Summary
               </h5>
-              
+
               <div className="row">
                 <div className="col-md-4 mb-3">
-                  <div className="text-center p-3 rounded" style={{ background: 'var(--gray-50)' }}>
+                  <div
+                    className="text-center p-3 rounded"
+                    style={{ background: "var(--gray-50)" }}
+                  >
                     <div className="fw-bold text-primary fs-4">
-                      {Math.floor((new Date() - new Date(employee.hireDate)) / (1000 * 60 * 60 * 24 * 365))}
+                      {Math.floor(
+                        (new Date() - new Date(employee.hireDate)) /
+                          (1000 * 60 * 60 * 24 * 365)
+                      )}
                     </div>
                     <small className="text-muted">Years of Service</small>
                   </div>
                 </div>
                 <div className="col-md-4 mb-3">
-                  <div className="text-center p-3 rounded" style={{ background: 'var(--gray-50)' }}>
+                  <div
+                    className="text-center p-3 rounded"
+                    style={{ background: "var(--gray-50)" }}
+                  >
                     <div className="fw-bold text-success fs-4">Active</div>
                     <small className="text-muted">Employment Status</small>
                   </div>
                 </div>
                 <div className="col-md-4 mb-3">
-                  <div className="text-center p-3 rounded" style={{ background: 'var(--gray-50)' }}>
+                  <div
+                    className="text-center p-3 rounded"
+                    style={{ background: "var(--gray-50)" }}
+                  >
                     <div className="fw-bold text-info fs-4">
                       {employee.department}
                     </div>
@@ -360,25 +379,28 @@ function ViewEmployee() {
       >
         <h6 className="fw-bold mb-3">Quick Actions</h6>
         <div className="d-flex flex-wrap gap-2">
-          <Link to={`/edit/${employee._id}`} className="btn-modern btn-primary btn-sm">
+          <Link
+            to={`/edit/${employee._id}`}
+            className="btn-modern btn-primary btn-sm"
+          >
             <FiEdit size={14} className="me-1" />
             Edit Information
           </Link>
-          <button 
+          <button
             className="btn-modern btn-secondary btn-sm"
             onClick={() => window.print()}
           >
             <FiUser size={14} className="me-1" />
             Print Profile
           </button>
-          <a 
+          <a
             href={`mailto:${employee.email}`}
             className="btn-modern btn-secondary btn-sm"
           >
             <FiMail size={14} className="me-1" />
             Send Email
           </a>
-          <a 
+          <a
             href={`tel:${employee.phone}`}
             className="btn-modern btn-secondary btn-sm"
           >
@@ -387,6 +409,14 @@ function ViewEmployee() {
           </a>
         </div>
       </motion.div>
+
+      <button
+        className={`fab ${showGoTop ? "" : "fab-hidden"}`}
+        onClick={scrollToTop}
+        aria-label="Go to top"
+      >
+        <FiArrowUp size={24} />
+      </button>
     </div>
   );
 }

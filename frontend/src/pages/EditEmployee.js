@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
-import { FiUser, FiMail, FiPhone, FiBriefcase, FiHome, FiCalendar, FiSave, FiArrowLeft, FiX } from 'react-icons/fi';
+import { FiUser, FiMail, FiArrowUp, FiPhone, FiBriefcase, FiHome, FiCalendar, FiSave, FiArrowLeft, FiX } from 'react-icons/fi';
 import 'react-toastify/dist/ReactToastify.css';
 
 function EditEmployee() {
@@ -22,6 +22,22 @@ function EditEmployee() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const [showGoTop, setShowGoTop] = useState(false);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowGoTop(window.scrollY > 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
 
   const departments = [
     'Engineering',
@@ -248,9 +264,10 @@ function EditEmployee() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             className="alert alert-warning py-2 px-3 mb-0"
-            style={{ fontSize: '14px' }}
+            style={{ fontSize: "14px" }}
           >
-            <strong>Unsaved Changes</strong> - Don't forget to save your changes!
+            <strong>Unsaved Changes</strong> - Don't forget to save your
+            changes!
           </motion.div>
         )}
       </motion.div>
@@ -270,12 +287,18 @@ function EditEmployee() {
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
                 className="avatar-gradient mx-auto mb-3"
-                style={{ width: '60px', height: '60px', fontSize: '24px' }}
+                style={{ width: "60px", height: "60px", fontSize: "24px" }}
               >
-                {formData.name ? formData.name.charAt(0).toUpperCase() : <FiUser size={24} />}
+                {formData.name ? (
+                  formData.name.charAt(0).toUpperCase()
+                ) : (
+                  <FiUser size={24} />
+                )}
               </motion.div>
               <h4 className="fw-bold text-dark">Update Employee Information</h4>
-              <p className="text-muted small">Make changes to the employee details below</p>
+              <p className="text-muted small">
+                Make changes to the employee details below
+              </p>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -349,7 +372,7 @@ function EditEmployee() {
               </div>
 
               {/* Action Buttons */}
-              <motion.div 
+              <motion.div
                 className="d-flex gap-3 justify-content-end mt-5 pt-3"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -382,7 +405,7 @@ function EditEmployee() {
                     Reset
                   </motion.button>
                 )}
-                
+
                 <motion.button
                   type="submit"
                   className="btn-modern btn-primary px-4"
@@ -392,10 +415,10 @@ function EditEmployee() {
                 >
                   {isSubmitting ? (
                     <>
-                      <div 
-                        className="spinner-border spinner-border-sm me-2" 
+                      <div
+                        className="spinner-border spinner-border-sm me-2"
                         role="status"
-                        style={{ width: '16px', height: '16px' }}
+                        style={{ width: "16px", height: "16px" }}
                       >
                         <span className="visually-hidden">Loading...</span>
                       </div>
@@ -429,7 +452,7 @@ function EditEmployee() {
                 Pending Changes
               </h6>
               <div className="d-flex flex-wrap gap-2">
-                {Object.keys(formData).map(key => {
+                {Object.keys(formData).map((key) => {
                   if (originalData[key] !== formData[key]) {
                     return (
                       <span key={key} className="badge bg-warning text-dark">
@@ -444,6 +467,14 @@ function EditEmployee() {
           </div>
         </motion.div>
       )}
+
+      <button
+        className={`fab ${showGoTop ? "" : "fab-hidden"}`}
+        onClick={scrollToTop}
+        aria-label="Go to top"
+      >
+        <FiArrowUp size={24} />
+      </button>
     </div>
   );
 }
