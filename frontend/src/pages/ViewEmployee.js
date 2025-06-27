@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 import { 
   FiUser, 
   FiMail, 
@@ -13,7 +14,6 @@ import {
   FiArrowLeft, 
   FiEdit, 
   FiTrash2,
-  FiMapPin,
   FiClock,
   FiAward
 } from 'react-icons/fi';
@@ -46,22 +46,43 @@ function ViewEmployee() {
   }, [id]);
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this employee? This action cannot be undone.")) {
-      setIsDeleting(true);
-      try {
-        await axios.delete(`http://localhost:5000/employees/${id}`);
-        toast.success("Employee deleted successfully!", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-        navigate('/');
-      } catch (err) {
-        console.error("Error deleting employee:", err);
-        toast.error("Failed to delete employee. Please try again.");
-        setIsDeleting(false);
-      }
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: "This action cannot be undone. Do you really want to delete this employee ?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+    background: '#fff'
+  });
+
+  if (result.isConfirmed) {
+    setIsDeleting(true);
+    try {
+      await axios.delete(`http://localhost:5000/employees/${id}`);
+      toast.success("Employee deleted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      Swal.fire({
+        title: 'Deleted!',
+        text: 'The employee has been removed.',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false
+      });
+
+      navigate('/');
+    } catch (err) {
+      console.error("Error deleting employee:", err);
+      toast.error("Failed to delete employee. Please try again.");
+      setIsDeleting(false);
     }
-  };
+  }
+};
 
   if (isLoading) {
     return (

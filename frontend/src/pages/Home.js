@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ToastContainer, toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 import { FiSearch, FiPlus, FiFilter, FiArrowUp, FiEye, FiEdit, FiTrash2, FiUsers, FiTrendingUp } from 'react-icons/fi';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -67,21 +68,43 @@ function Home() {
     }
   };
 
-  const deleteEmployee = async (id) => {
-    if (window.confirm("Are you sure you want to delete this employee?")) {
-      try {
-        await axios.delete(`http://localhost:5000/employees/${id}`);
-        toast.success("Employee deleted successfully", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-        getEmployees();
-      } catch (err) {
-        console.error("Error deleting employee:", err);
-        toast.error("Failed to delete employee");
-      }
+const deleteEmployee = async (id) => {
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: "This action cannot be undone. Do you really want to delete this employee ?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+    background: '#fff',
+  });
+
+  if (result.isConfirmed) {
+    try {
+      await axios.delete(`http://localhost:5000/employees/${id}`);
+      toast.success("Employee deleted successfully", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      getEmployees();
+
+      Swal.fire({
+        title: 'Deleted!',
+        text: 'Employee has been removed.',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    } catch (err) {
+      console.error("Error deleting employee:", err);
+      toast.error("Failed to delete employee");
     }
-  };
+  }
+};
+
 
   useEffect(() => {
     getEmployees();
