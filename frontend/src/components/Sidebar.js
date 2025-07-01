@@ -29,7 +29,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }} 
+            transition={{ duration: 0.3, ease: "easeOut" }}
             className="sidebar-overlay"
             onClick={closeSidebar}
           />
@@ -39,7 +39,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
             initial={{ x: -300 }}
             animate={{ x: 0 }}
             exit={{ x: -300 }}
-            transition={{ duration: 0.3, ease: "easeOut" }} 
+            transition={{ duration: 0.3, ease: "easeOut" }}
             className="sidebar glass-card"
           >
             <div className="sidebar-header">
@@ -47,10 +47,27 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
             </div>
 
             <nav className="sidebar-nav">
-              <ul>
+              <motion.ul
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.05,
+                      delayChildren: 0.1,
+                    },
+                  },
+                }}
+              >
                 {navItems.map((item) => (
                   <motion.li
                     key={item.path}
+                    variants={{
+                      hidden: { opacity: 0, x: -20 },
+                      visible: { opacity: 1, x: 0 },
+                    }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -66,7 +83,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                     </Link>
                   </motion.li>
                 ))}
-              </ul>
+              </motion.ul>
             </nav>
 
             <div className="sidebar-footer">

@@ -85,6 +85,13 @@
   border-color: var(--gray-600);
 }
 
+[data-theme="dark"] .modern-form-control:focus {
+  border-color: var(--primary);
+  background: var(--gray-100);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  transform: translateY(-1px);
+}
+
 [data-theme="dark"] .modern-form-control::placeholder {
   color: var(--gray-400);
 }
@@ -106,6 +113,10 @@
   color: var(--text-color) !important;
 }
 
+[data-theme="dark"] .text-dark {
+  color: var(--text-color) !important;
+}
+
 [data-theme="dark"] .bg-dark {
   background: var(--gray-100) !important;
 }
@@ -121,6 +132,11 @@
 [data-theme="dark"] .nav-link:hover {
   color: var(--gray-700);
 }
+
+[data-theme="dark"] .btn-secondary {
+  background: linear-gradient(135deg, var(--gray-300), var(--gray-400));
+}
+
 
 /* Base styles */
 * {

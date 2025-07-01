@@ -283,7 +283,7 @@ function AddEmployee() {
                 </div>
                 <div className="col-md-6">
                   <FormField
-                    icon={<FiCalendar size={18} />}
+                    icon={<FiCalendar size={18}/>}
                     label="Hire Date"
                     name="hireDate"
                     type="date"

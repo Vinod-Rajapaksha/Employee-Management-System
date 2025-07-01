@@ -249,7 +249,7 @@ function ViewEmployee() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <h3 className="fw-bold mb-2">{employee.name}</h3>
+              <h3 className="fw-bold mb-2 text-dark">{employee.name}</h3>
               <h5 className="text-primary mb-3">{employee.jobTitle}</h5>
               <span className="badge bg-primary px-3 py-2 rounded-pill">
                 <FiHome size={14} className="me-1" />
@@ -324,7 +324,7 @@ function ViewEmployee() {
               transition={{ delay: 0.6 }}
               className="glass-card p-4"
             >
-              <h5 className="fw-bold mb-4 d-flex align-items-center">
+              <h5 className="fw-bold mb-4 d-flex align-items-center text-dark">
                 <FiAward size={20} className="me-2 text-primary" />
                 Employment Summary
               </h5>
@@ -377,7 +377,7 @@ function ViewEmployee() {
         transition={{ delay: 0.7 }}
         className="glass-card p-4 mt-4"
       >
-        <h6 className="fw-bold mb-3">Quick Actions</h6>
+        <h6 className="fw-bold mb-3 text-dark">Quick Actions</h6>
         <div className="d-flex flex-wrap gap-2">
           <Link
             to={`/edit/${employee._id}`}
