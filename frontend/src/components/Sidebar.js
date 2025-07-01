@@ -29,6 +29,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }} 
             className="sidebar-overlay"
             onClick={closeSidebar}
           />
@@ -38,7 +39,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
             initial={{ x: -300 }}
             animate={{ x: 0 }}
             exit={{ x: -300 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            transition={{ duration: 0.3, ease: "easeOut" }} 
             className="sidebar glass-card"
           >
             <div className="sidebar-header">
@@ -55,7 +56,9 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                   >
                     <Link
                       to={item.path}
-                      className={`nav-link ${location.pathname === item.path ? "active" : ""}`}
+                      className={`nav-link ${
+                        location.pathname === item.path ? "active" : ""
+                      }`}
                       onClick={closeSidebar}
                     >
                       <span className="nav-icon ms-2">{item.icon}</span>
@@ -67,10 +70,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
             </nav>
 
             <div className="sidebar-footer">
-              <motion.button
-                whileHover={{ x: 5 }}
-                className="logout-btn"
-              >
+              <motion.button whileHover={{ x: 5 }} className="logout-btn">
                 <FiLogOut size={18} />
                 <span>Logout</span>
               </motion.button>

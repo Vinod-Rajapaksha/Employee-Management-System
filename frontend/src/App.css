@@ -114,6 +114,14 @@
   color: var(--text-color) !important;
 }
 
+[data-theme="dark"] .nav-link {
+  color: var(--gray-700);
+}
+
+[data-theme="dark"] .nav-link:hover {
+  color: var(--gray-700);
+}
+
 /* Base styles */
 * {
   margin: 0;
