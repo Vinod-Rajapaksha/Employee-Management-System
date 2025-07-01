@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Home from './pages/Home';
+import Analytics from './pages/Analytics';
+import Employee from './pages/Employee';
 import AddEmployee from './pages/AddEmployee';
 import EditEmployee from './pages/EditEmployee';
 import ViewEmployee from './pages/ViewEmployee';
@@ -32,6 +34,32 @@ const AppContent = () => {
                     transition={{ duration: 0.5 }}
                   >
                     <Home />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/analytics"
+                element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Analytics />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/employees"
+                element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Employee />
                   </motion.div>
                 }
               />

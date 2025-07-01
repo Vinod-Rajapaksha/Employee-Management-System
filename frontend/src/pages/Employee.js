@@ -1,57 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ToastContainer, toast } from 'react-toastify';
+import { FiEye, FiEdit, FiTrash2, FiSearch } from 'react-icons/fi';
+import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
 import Swal from 'sweetalert2';
-import { FiSearch, FiPlus, FiFilter, FiArrowUp, FiEye, FiEdit, FiTrash2, FiUsers, FiTrendingUp } from 'react-icons/fi';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Home() {
+const Employee = () => {
   const [employees, setEmployees] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDepartment, setFilterDepartment] = useState('all');
-  const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState({
-    total: 0,
-    departments: 0,
-    newThisMonth: 0
-  });
-
-  const [showGoTop, setShowGoTop] = useState(false);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowGoTop(window.scrollY > 100);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const getEmployees = async () => {
     setIsLoading(true);
     try {
       const res = await axios.get("http://localhost:5000/employees");
       setEmployees(res.data);
-      
-      // Calculate stats
-      const departments = new Set(res.data.map(emp => emp.department));
-      const thisMonth = new Date();
-      thisMonth.setDate(1);
-      const newThisMonth = res.data.filter(emp => 
-        new Date(emp.hireDate) >= thisMonth
-      ).length;
-      
-      setStats({
-        total: res.data.length,
-        departments: departments.size,
-        newThisMonth
-      });
     } catch (err) {
       console.error("Error fetching employees:", err);
       toast.error("Failed to load employees", {
@@ -67,84 +33,62 @@ function Home() {
     }
   };
 
-const deleteEmployee = async (id) => {
-  const result = await Swal.fire({
-    title: 'Are you sure?',
-    text: "This action cannot be undone. Do you really want to delete this employee ?",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'Cancel',
-    background: '#fff',
-  });
+  const deleteEmployee = async (id) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "This action cannot be undone. Do you really want to delete this employee?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      background: '#fff',
+    });
 
-  if (result.isConfirmed) {
-    try {
-      await axios.delete(`http://localhost:5000/employees/${id}`);
-      toast.success("Employee deleted successfully", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`http://localhost:5000/employees/${id}`);
+        toast.success("Employee deleted successfully", {
+          position: "top-right",
+          autoClose: 3000,
+        });
 
-      getEmployees();
+        getEmployees();
 
-      Swal.fire({
-        title: 'Deleted!',
-        text: 'Employee has been removed.',
-        icon: 'success',
-        timer: 2000,
-        showConfirmButton: false
-      });
-    } catch (err) {
-      console.error("Error deleting employee:", err);
-      toast.error("Failed to delete employee");
+        Swal.fire({
+          title: 'Deleted!',
+          text: 'Employee has been removed.',
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false
+        });
+      } catch (err) {
+        console.error("Error deleting employee:", err);
+        toast.error("Failed to delete employee");
+      }
     }
-  }
-};
-
+  };
 
   useEffect(() => {
     getEmployees();
   }, []);
 
+  // Filter employees based on search term and department
   const filteredEmployees = employees.filter(emp => {
     const matchesSearch = 
-      emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      emp.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      emp.jobTitle.toLowerCase().includes(searchTerm.toLowerCase());
+      emp.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.jobTitle?.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesDepartment = 
       filterDepartment === 'all' || 
-      emp.department.toLowerCase() === filterDepartment.toLowerCase();
+      emp.department?.toLowerCase() === filterDepartment.toLowerCase();
     
     return matchesSearch && matchesDepartment;
   });
 
-  const departments = ['all', ...new Set(employees.map(emp => emp.department))];
-
-  const StatCard = ({ icon, title, value, color }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="glass-card p-4 card-hover"
-      style={{ background: `linear-gradient(135deg, ${color}15, ${color}05)` }}
-    >
-      <div className="d-flex align-items-center justify-content-between">
-        <div>
-          <p className="text-muted mb-1 fw-medium">{title}</p>
-          <h3 className="mb-0 fw-bold" style={{ color }}>{value}</h3>
-        </div>
-        <div 
-          className="p-3 rounded-circle"
-          style={{ background: `${color}20`, color }}
-        >
-          {icon}
-        </div>
-      </div>
-    </motion.div>
-  );
+  const departments = ['all', ...new Set(employees.map(emp => emp.department).filter(Boolean))];
 
   return (
     <div className="container-fluid">
@@ -155,42 +99,10 @@ const deleteEmployee = async (id) => {
         className="d-flex justify-content-between align-items-center mb-4"
       >
         <div>
-          <h2 className="gradient-text mb-2">Employee Management</h2>
-          <p className="text-muted">Manage your team efficiently</p>
+          <h2 className="gradient-text mb-2">All Employees</h2>
+          <p className="text-muted">View and manage all employees</p>
         </div>
-        <Link to="/add" className="btn-modern btn-primary">
-          <FiPlus size={18} />
-          Add Employee
-        </Link>
       </motion.div>
-
-      {/* Stats Cards */}
-      <div className="row mb-4">
-        <div className="col-md-4 mb-3">
-          <StatCard
-            icon={<FiUsers size={24} />}
-            title="Total Employees"
-            value={stats.total}
-            color="#667eea"
-          />
-        </div>
-        <div className="col-md-4 mb-3">
-          <StatCard
-            icon={<FiFilter size={24} />}
-            title="Departments"
-            value={stats.departments}
-            color="#f093fb"
-          />
-        </div>
-        <div className="col-md-4 mb-3">
-          <StatCard
-            icon={<FiTrendingUp size={24} />}
-            title="New This Month"
-            value={stats.newThisMonth}
-            color="#4facfe"
-          />
-        </div>
-      </div>
 
       {/* Search and Filter Section */}
       <motion.div
@@ -256,7 +168,12 @@ const deleteEmployee = async (id) => {
               👥
             </div>
             <h4 className="text-muted">No employees found</h4>
-            <p className="text-muted">Try adjusting your search criteria</p>
+            <p className="text-muted">
+              {employees.length === 0 
+                ? "No employees have been added yet" 
+                : "Try adjusting your search criteria"
+              }
+            </p>
           </motion.div>
         ) : (
           <div className="table-responsive">
@@ -272,7 +189,7 @@ const deleteEmployee = async (id) => {
                 </tr>
               </thead>
               <tbody>
-                {filteredEmployees.slice(0, 20).map((emp, index) => (
+                {filteredEmployees.map((emp, index) => (
                   <motion.tr
                     key={emp._id}
                     initial={{ opacity: 0, x: -20 }}
@@ -290,7 +207,7 @@ const deleteEmployee = async (id) => {
                             fontSize: "16px",
                           }}
                         >
-                          {emp.name.charAt(0).toUpperCase()}
+                          {emp.name?.charAt(0).toUpperCase() || '?'}
                         </div>
                         <div>
                           <Link
@@ -298,21 +215,21 @@ const deleteEmployee = async (id) => {
                             className="text-decoration-none fw-bold"
                             style={{ color: "var(--text-color)" }}
                           >
-                            {emp.name}
+                            {emp.name || 'Unknown'}
                           </Link>
-                          <div className="text-muted small">{emp.email}</div>
+                          <div className="text-muted small">{emp.email || ''}</div>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <div className="text-muted small">📧 {emp.email}</div>
-                      <div className="text-muted small">📱 {emp.phone}</div>
+                      <div className="text-muted small">📧 {emp.email || 'N/A'}</div>
+                      <div className="text-muted small">📱 {emp.phone || 'N/A'}</div>
                     </td>
                     <td>
-                      <div className="fw-medium">{emp.jobTitle}</div>
+                      <div className="fw-medium">{emp.jobTitle || 'N/A'}</div>
                     </td>
                     <td>
-                      <span className="badge bg-info">{emp.department}</span>
+                      <span className="badge bg-info">{emp.department || 'N/A'}</span>
                     </td>
                     <td>
                       <div className="d-flex gap-2">
@@ -334,7 +251,7 @@ const deleteEmployee = async (id) => {
                           onClick={() => deleteEmployee(emp._id)}
                           className="btn-modern btn-danger btn-sm"
                           title="Delete Employee"
-                          aria-label={`Delete ${emp.name}`}
+                          aria-label={`Delete ${emp.name || 'employee'}`}
                         >
                           <FiTrash2 size={14} />
                         </button>
@@ -360,17 +277,8 @@ const deleteEmployee = async (id) => {
         pauseOnHover
         theme="light"
       />
-
-      <button
-        className={`fab ${showGoTop ? "" : "fab-hidden"}`}
-        onClick={scrollToTop}
-        aria-label="Go to top"
-      >
-        <FiArrowUp size={24} />
-      </button>
-      
     </div>
   );
-}
+};
 
-export default Home;
+export default Employee;
