@@ -159,10 +159,19 @@
 }
 
 [data-theme="dark"] .time-range-selector,
-[data-theme="dark"] .analytics-tabs,
-[data-theme="dark"] .filter-toggle {
+[data-theme="dark"] .analytics-tabs {
   background: var(--gray-100);
 }
+
+[data-theme="dark"] .filter-toggle{
+   background: var(--gray-300);
+   color: var(--gray-800);
+}
+
+[data-theme="dark"] .filter-toggle:hover{
+   background: var(--gray-200)!important;
+} 
+
 
 [data-theme="dark"] .time-range-btn,
 [data-theme="dark"] .tab {
@@ -1191,6 +1200,10 @@ footer {
   transition: all 0.2s;
 }
 
+.filter-toggle:hover{
+   background: var(--gray-300)!important;
+} 
+
 .filter-options {
   position: absolute;
   top: 100%;
@@ -1443,6 +1456,27 @@ footer {
 .pagination {
   display: flex;
   gap: 4px;
+}
+
+.prev-btn, .next-btn {
+  border: none !important;
+  color: var(--gray-700);
+  outline: none;
+  box-shadow: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.prev-btn.disabled, .next-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .page-btn {

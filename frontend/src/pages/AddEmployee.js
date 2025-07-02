@@ -38,6 +38,7 @@ function AddEmployee() {
   const departments = [
     'Engineering',
     'Marketing',
+    'IT',
     'Sales',
     'HR',
     'Finance',
@@ -88,10 +89,10 @@ function AddEmployee() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
-    
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      toast.error('Please fix the errors in the form', {
+      toast.error("Please fix the errors in the form", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -104,8 +105,8 @@ function AddEmployee() {
 
     setIsSubmitting(true);
     try {
-      await axios.post('http://localhost:5000/employees', formData);
-      toast.success('Employee added successfully!', {
+      await axios.post("http://localhost:5000/employees", formData);
+      toast.success("Employee added successfully!", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -113,10 +114,10 @@ function AddEmployee() {
         pauseOnHover: true,
         draggable: true,
       });
-      navigate('/');
+      navigate("/");
     } catch (err) {
-      console.error('Error adding employee:', err);
-      toast.error('Failed to add employee. Please try again.', {
+      console.error("Error adding employee:", err);
+      toast.error("Failed to add employee. Please try again.", {
         position: "top-right",
         autoClose: 3000,
       });
@@ -125,7 +126,17 @@ function AddEmployee() {
     }
   };
 
-  const FormField = ({ icon, label, name, type = "text", options = null, ...props }) => (
+  const FormField = ({
+    icon,
+    label,
+    name,
+    type = "text",
+    options = null,
+    value,
+    onChange,
+    error,
+    ...props
+  }) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -133,39 +144,43 @@ function AddEmployee() {
       className="mb-4"
     >
       <label className="form-label d-flex align-items-center gap-2">
-        <span style={{ color: 'var(--primary)' }}>{icon}</span>
+        <span style={{ color: "var(--primary)" }}>{icon}</span>
         <span className="fw-medium">{label}</span>
       </label>
+
       {options ? (
         <select
-          className={`modern-form-control ${errors[name] ? 'is-invalid' : ''}`}
+          className={`modern-form-control ${error ? "is-invalid" : ""}`}
           name={name}
-          value={formData[name]}
-          onChange={handleChange}
+          value={value}
+          onChange={onChange}
           {...props}
         >
-          {options.map(option => (
-            <option key={option} value={option}>{option}</option>
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
           ))}
         </select>
       ) : (
         <input
           type={type}
-          className={`modern-form-control ${errors[name] ? 'is-invalid' : ''}`}
+          className={`modern-form-control ${error ? "is-invalid" : ""}`}
           name={name}
-          value={formData[name]}
-          onChange={handleChange}
+          value={value}
+          onChange={onChange}
           {...props}
         />
       )}
-      {errors[name] && (
-        <motion.div 
+
+      {error && (
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="invalid-feedback d-block"
-          style={{ marginTop: '0.5rem' }}
+          style={{ marginTop: "0.5rem" }}
         >
-          <small>{errors[name]}</small>
+          <small>{error}</small>
         </motion.div>
       )}
     </motion.div>

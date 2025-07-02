@@ -100,9 +100,9 @@ const UserProfile = () => {
       whileHover={{ scale: 1.05 }}
     >
       <div className="avatar-gradient">
-        JD
+        A
       </div>
-      <span className="fw-medium">John Doe</span>
+      <span className="fw-medium">Admin</span>
     </motion.div>
   );
 };

@@ -179,7 +179,7 @@ function EditEmployee() {
     );
   }
 
-  const FormField = ({ icon, label, name, type = "text", options = null, ...props }) => (
+  const FormField = ({ icon,label, name, type = "text", options = null, formData, originalData, errors, handleChange, ...props}) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -311,6 +311,10 @@ function EditEmployee() {
                     placeholder="Enter full name"
                     aria-label="Full name"
                     autoComplete="name"
+                    formData={formData}
+                    originalData={originalData}
+                    errors={errors}
+                    handleChange={handleChange}
                   />
                 </div>
                 <div className="col-md-6">
@@ -322,6 +326,10 @@ function EditEmployee() {
                     placeholder="Enter email address"
                     aria-label="Email"
                     autoComplete="email"
+                    formData={formData}
+                    originalData={originalData}
+                    errors={errors}
+                    handleChange={handleChange}
                   />
                 </div>
               </div>
@@ -336,6 +344,10 @@ function EditEmployee() {
                     placeholder="Enter phone number"
                     aria-label="Phone number"
                     autoComplete="tel"
+                    formData={formData}
+                    originalData={originalData}
+                    errors={errors}
+                    handleChange={handleChange}
                   />
                 </div>
                 <div className="col-md-6">
@@ -346,6 +358,10 @@ function EditEmployee() {
                     placeholder="Enter job title"
                     aria-label="Job title"
                     autoComplete="organization-title"
+                    formData={formData}
+                    originalData={originalData}
+                    errors={errors}
+                    handleChange={handleChange}
                   />
                 </div>
               </div>
@@ -358,6 +374,10 @@ function EditEmployee() {
                     name="department"
                     options={departments}
                     aria-label="Department"
+                    formData={formData}
+                    originalData={originalData}
+                    errors={errors}
+                    handleChange={handleChange}
                   />
                 </div>
                 <div className="col-md-6">
@@ -367,6 +387,10 @@ function EditEmployee() {
                     name="hireDate"
                     type="date"
                     aria-label="Hire date"
+                    formData={formData}
+                    originalData={originalData}
+                    errors={errors}
+                    handleChange={handleChange}
                   />
                 </div>
               </div>

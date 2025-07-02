@@ -111,7 +111,6 @@ const DepartmentFilter = ({ value, options, onChange }) => {
       <motion.button
         className="filter-toggle"
         onClick={() => setExpanded(!expanded)}
-        whileHover={{ backgroundColor: 'rgba(0,0,0,0.05)' }}
       >
         <span>Department: {value === 'all' ? 'All' : value}</span>
         {expanded ? <FiChevronUp /> : <FiChevronDown />}
@@ -626,11 +625,11 @@ const Analytics = () => {
                   Showing 1 to 10 of {employees.length} entries
                 </div>
                 <div className="pagination">
-                  <button className="page-btn disabled">Previous</button>
+                  <button className="prev-btn disabled me-4">Previous</button>
                   <button className="page-btn active">1</button>
                   <button className="page-btn">2</button>
                   <button className="page-btn">3</button>
-                  <button className="page-btn">Next</button>
+                  <button className="next-btn ms-2">Next</button>
                 </div>
               </div>
             </motion.div>
