@@ -1,19 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { toast } from 'react-toastify';
-import { FiUser, FiMail, FiArrowUp, FiPhone, FiBriefcase, FiHome, FiCalendar, FiSave, FiArrowLeft, FiX } from 'react-icons/fi';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import {
+  FiUser,
+  FiMail,
+  FiArrowUp,
+  FiPhone,
+  FiBriefcase,
+  FiHome,
+  FiCalendar,
+  FiSave,
+  FiArrowLeft,
+  FiX,
+} from "react-icons/fi";
+import "react-toastify/dist/ReactToastify.css";
 
 function EditEmployee() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    jobTitle: '',
-    department: 'Engineering',
-    hireDate: '',
+    name: "",
+    email: "",
+    phone: "",
+    jobTitle: "",
+    department: "Engineering",
+    hireDate: "",
   });
 
   const [originalData, setOriginalData] = useState({});
@@ -38,17 +49,16 @@ function EditEmployee() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
   const departments = [
-    'Engineering',
-    'Marketing',
-    'Sales',
-    'HR',
-    'Finance',
-    'Operations',
-    'Product',
-    'Design',
-    'Support'
+    "Engineering",
+    "Marketing",
+    "Sales",
+    "HR",
+    "Finance",
+    "Operations",
+    "Product",
+    "Design",
+    "Support",
   ];
 
   useEffect(() => {
@@ -58,17 +68,17 @@ function EditEmployee() {
         const res = await axios.get(`http://localhost:5000/employees/${id}`);
         const employeeData = {
           ...res.data,
-          hireDate: res.data.hireDate ? res.data.hireDate.split('T')[0] : '',
+          hireDate: res.data.hireDate ? res.data.hireDate.split("T")[0] : "",
         };
         setFormData(employeeData);
         setOriginalData(employeeData);
       } catch (err) {
-        console.error('Error loading employee:', err);
-        toast.error('Could not load employee data', {
+        console.error("Error loading employee:", err);
+        toast.error("Could not load employee data", {
           position: "top-right",
           autoClose: 3000,
         });
-        navigate('/');
+        navigate("/");
       } finally {
         setIsLoading(false);
       }
@@ -78,36 +88,36 @@ function EditEmployee() {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = "Name is required";
     } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Name must be at least 2 characters';
+      newErrors.name = "Name must be at least 2 characters";
     }
-    
+
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = "Please enter a valid email address";
     }
-    
+
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
+      newErrors.phone = "Phone number is required";
     } else if (!/^\+?[\d\s\-\(\)]{10,}$/.test(formData.phone)) {
-      newErrors.phone = 'Please enter a valid phone number';
+      newErrors.phone = "Please enter a valid phone number";
     }
-    
+
     if (!formData.jobTitle.trim()) {
-      newErrors.jobTitle = 'Job title is required';
+      newErrors.jobTitle = "Job title is required";
     }
-    
+
     return newErrors;
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors({ ...errors, [name]: null });
@@ -117,10 +127,10 @@ function EditEmployee() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
-    
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      toast.error('Please fix the errors in the form', {
+      toast.error("Please fix the errors in the form", {
         position: "top-right",
         autoClose: 3000,
       });
@@ -130,14 +140,14 @@ function EditEmployee() {
     setIsSubmitting(true);
     try {
       await axios.put(`http://localhost:5000/employees/${id}`, formData);
-      toast.success('Employee updated successfully!', {
+      toast.success("Employee updated successfully!", {
         position: "top-right",
         autoClose: 3000,
       });
       navigate(`/view/${id}`);
     } catch (err) {
-      console.error('Error updating employee:', err);
-      toast.error('Failed to update employee. Please try again.', {
+      console.error("Error updating employee:", err);
+      toast.error("Failed to update employee. Please try again.", {
         position: "top-right",
         autoClose: 3000,
       });
@@ -149,7 +159,7 @@ function EditEmployee() {
   const handleReset = () => {
     setFormData(originalData);
     setErrors({});
-    toast.info('Form reset to original values', {
+    toast.info("Form reset to original values", {
       position: "top-right",
       autoClose: 2000,
     });
@@ -162,77 +172,31 @@ function EditEmployee() {
   if (isLoading) {
     return (
       <div className="container-fluid">
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '60vh' }}>
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ minHeight: "60vh" }}
+        >
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center"
           >
-            <div className="spinner-border text-primary mb-3" role="status" style={{ width: '3rem', height: '3rem' }}>
+            <div
+              className="spinner-border text-primary mb-3"
+              role="status"
+              style={{ width: "3rem", height: "3rem" }}
+            >
               <span className="visually-hidden">Loading...</span>
             </div>
             <h5 className="text-muted">Loading employee data...</h5>
-            <p className="text-muted small">Please wait while we fetch the information</p>
+            <p className="text-muted small">
+              Please wait while we fetch the information
+            </p>
           </motion.div>
         </div>
       </div>
     );
   }
-
-  const FormField = ({ icon,label, name, type = "text", options = null, formData, originalData, errors, handleChange, ...props}) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="mb-4"
-    >
-      <label className="form-label d-flex align-items-center gap-2">
-        <span style={{ color: 'var(--primary)' }}>{icon}</span>
-        <span className="fw-medium">{label}</span>
-        {originalData[name] !== formData[name] && (
-          <span className="badge bg-warning text-dark ms-2" style={{ fontSize: '10px' }}>
-            Modified
-          </span>
-        )}
-      </label>
-      {options ? (
-        <select
-          className={`modern-form-control ${errors[name] ? 'is-invalid' : ''} ${
-            originalData[name] !== formData[name] ? 'border-warning' : ''
-          }`}
-          name={name}
-          value={formData[name]}
-          onChange={handleChange}
-          {...props}
-        >
-          {options.map(option => (
-            <option key={option} value={option}>{option}</option>
-          ))}
-        </select>
-      ) : (
-        <input
-          type={type}
-          className={`modern-form-control ${errors[name] ? 'is-invalid' : ''} ${
-            originalData[name] !== formData[name] ? 'border-warning' : ''
-          }`}
-          name={name}
-          value={formData[name]}
-          onChange={handleChange}
-          {...props}
-        />
-      )}
-      {errors[name] && (
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="invalid-feedback d-block"
-          style={{ marginTop: '0.5rem' }}
-        >
-          <small>{errors[name]}</small>
-        </motion.div>
-      )}
-    </motion.div>
-  );
 
   return (
     <div className="container-fluid">
@@ -502,5 +466,76 @@ function EditEmployee() {
     </div>
   );
 }
+
+const FormField = ({
+  icon,
+  label,
+  name,
+  type = "text",
+  options = null,
+  formData,
+  originalData,
+  errors,
+  handleChange,
+  ...props
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+    className="mb-4"
+  >
+    <label className="form-label d-flex align-items-center gap-2">
+      <span style={{ color: "var(--primary)" }}>{icon}</span>
+      <span className="fw-medium">{label}</span>
+      {originalData[name] !== formData[name] && (
+        <span
+          className="badge bg-warning text-dark ms-2"
+          style={{ fontSize: "10px" }}
+        >
+          Modified
+        </span>
+      )}
+    </label>
+    {options ? (
+      <select
+        className={`modern-form-control ${errors[name] ? "is-invalid" : ""} ${
+          originalData[name] !== formData[name] ? "border-warning" : ""
+        }`}
+        name={name}
+        value={formData[name]}
+        onChange={handleChange}
+        {...props}
+      >
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    ) : (
+      <input
+        type={type}
+        className={`modern-form-control ${errors[name] ? "is-invalid" : ""} ${
+          originalData[name] !== formData[name] ? "border-warning" : ""
+        }`}
+        name={name}
+        value={formData[name]}
+        onChange={handleChange}
+        {...props}
+      />
+    )}
+    {errors[name] && (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="invalid-feedback d-block"
+        style={{ marginTop: "0.5rem" }}
+      >
+        <small>{errors[name]}</small>
+      </motion.div>
+    )}
+  </motion.div>
+);
 
 export default EditEmployee;

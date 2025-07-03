@@ -223,7 +223,7 @@ const deleteEmployee = async (id) => {
               aria-label="Filter by department"
             >
               {departments.map((dept) => (
-                <option key={dept} value={dept}>
+                <option filter-optionskey={dept} value={dept}>
                   {dept === "all" ? "🏢 All Departments" : `🏢 ${dept}`}
                 </option>
               ))}

@@ -1,18 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { toast } from 'react-toastify';
-import { FiUser, FiMail, FiPhone, FiArrowUp, FiBriefcase, FiHome, FiCalendar, FiSave, FiArrowLeft } from 'react-icons/fi';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import {
+  FiUser,
+  FiMail,
+  FiPhone,
+  FiArrowUp,
+  FiBriefcase,
+  FiHome,
+  FiCalendar,
+  FiSave,
+  FiArrowLeft,
+} from "react-icons/fi";
 
 function AddEmployee() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    jobTitle: '',
-    department: 'Engineering',
-    hireDate: new Date().toISOString().split('T')[0],
+    name: "",
+    email: "",
+    phone: "",
+    jobTitle: "",
+    department: "Engineering",
+    hireDate: new Date().toISOString().split("T")[0],
   });
 
   const [errors, setErrors] = useState({});
@@ -20,66 +30,65 @@ function AddEmployee() {
   const navigate = useNavigate();
 
   const [showGoTop, setShowGoTop] = useState(false);
-  
-    const scrollToTop = () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowGoTop(window.scrollY > 100);
     };
-  
-    useEffect(() => {
-      const handleScroll = () => {
-        setShowGoTop(window.scrollY > 100);
-      };
-  
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-  
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const departments = [
-    'Engineering',
-    'Marketing',
-    'IT',
-    'Sales',
-    'HR',
-    'Finance',
-    'Operations',
-    'Product',
-    'Design',
-    'Support'
+    "Engineering",
+    "Marketing",
+    "IT",
+    "Sales",
+    "HR",
+    "Finance",
+    "Operations",
+    "Product",
+    "Design",
+    "Support",
   ];
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = "Name is required";
     } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Name must be at least 2 characters';
+      newErrors.name = "Name must be at least 2 characters";
     }
-    
+
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = "Please enter a valid email address";
     }
-    
+
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
+      newErrors.phone = "Phone number is required";
     } else if (!/^\+?[\d\s\-\(\)]{10,}$/.test(formData.phone)) {
-      newErrors.phone = 'Please enter a valid phone number';
+      newErrors.phone = "Please enter a valid phone number";
     }
-    
+
     if (!formData.jobTitle.trim()) {
-      newErrors.jobTitle = 'Job title is required';
+      newErrors.jobTitle = "Job title is required";
     }
-    
+
     return newErrors;
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors({ ...errors, [name]: null });
@@ -125,66 +134,6 @@ function AddEmployee() {
       setIsSubmitting(false);
     }
   };
-
-  const FormField = ({
-    icon,
-    label,
-    name,
-    type = "text",
-    options = null,
-    value,
-    onChange,
-    error,
-    ...props
-  }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="mb-4"
-    >
-      <label className="form-label d-flex align-items-center gap-2">
-        <span style={{ color: "var(--primary)" }}>{icon}</span>
-        <span className="fw-medium">{label}</span>
-      </label>
-
-      {options ? (
-        <select
-          className={`modern-form-control ${error ? "is-invalid" : ""}`}
-          name={name}
-          value={value}
-          onChange={onChange}
-          {...props}
-        >
-          {options.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <input
-          type={type}
-          className={`modern-form-control ${error ? "is-invalid" : ""}`}
-          name={name}
-          value={value}
-          onChange={onChange}
-          {...props}
-        />
-      )}
-
-      {error && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="invalid-feedback d-block"
-          style={{ marginTop: "0.5rem" }}
-        >
-          <small>{error}</small>
-        </motion.div>
-      )}
-    </motion.div>
-  );
 
   return (
     <div className="container-fluid">
@@ -247,6 +196,9 @@ function AddEmployee() {
                     placeholder="Enter full name"
                     aria-label="Full name"
                     autoComplete="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    error={errors.name}
                   />
                 </div>
                 <div className="col-md-6">
@@ -258,6 +210,9 @@ function AddEmployee() {
                     placeholder="Enter email address"
                     aria-label="Email"
                     autoComplete="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    error={errors.email}
                   />
                 </div>
               </div>
@@ -272,6 +227,9 @@ function AddEmployee() {
                     placeholder="Enter phone number"
                     aria-label="Phone number"
                     autoComplete="tel"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    error={errors.phone}
                   />
                 </div>
                 <div className="col-md-6">
@@ -282,6 +240,9 @@ function AddEmployee() {
                     placeholder="Enter job title"
                     aria-label="Job title"
                     autoComplete="organization-title"
+                    value={formData.jobTitle}
+                    onChange={handleChange}
+                    error={errors.jobTitle}
                   />
                 </div>
               </div>
@@ -294,15 +255,21 @@ function AddEmployee() {
                     name="department"
                     options={departments}
                     aria-label="Department"
+                    value={formData.department}
+                    onChange={handleChange}
+                    error={errors.department}
                   />
                 </div>
                 <div className="col-md-6">
                   <FormField
-                    icon={<FiCalendar size={18}/>}
+                    icon={<FiCalendar size={18} />}
                     label="Hire Date"
                     name="hireDate"
                     type="date"
                     aria-label="Hire date"
+                    value={formData.hireDate}
+                    onChange={handleChange}
+                    error={errors.hireDate}
                   />
                 </div>
               </div>
@@ -388,5 +355,65 @@ function AddEmployee() {
     </div>
   );
 }
+
+const FormField = ({
+  icon,
+  label,
+  name,
+  type = "text",
+  options = null,
+  value,
+  onChange,
+  error,
+  ...props
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+    className="mb-4"
+  >
+    <label className="form-label d-flex align-items-center gap-2">
+      <span style={{ color: "var(--primary)" }}>{icon}</span>
+      <span className="fw-medium">{label}</span>
+    </label>
+
+    {options ? (
+      <select
+        className={`modern-form-control ${error ? "is-invalid" : ""}`}
+        name={name}
+        value={value}
+        onChange={onChange}
+        {...props}
+      >
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    ) : (
+      <input
+        type={type}
+        className={`modern-form-control ${error ? "is-invalid" : ""}`}
+        name={name}
+        value={value}
+        onChange={onChange}
+        {...props}
+      />
+    )}
+
+    {error && (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="invalid-feedback d-block"
+        style={{ marginTop: "0.5rem" }}
+      >
+        <small>{error}</small>
+      </motion.div>
+    )}
+  </motion.div>
+);
 
 export default AddEmployee;
