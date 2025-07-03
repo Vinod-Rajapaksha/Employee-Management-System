@@ -1,28 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ToastContainer, toast } from 'react-toastify';
-import Swal from 'sweetalert2';
-import { FiSearch, FiPlus, FiFilter, FiArrowUp, FiEye, FiEdit, FiTrash2, FiUsers, FiTrendingUp } from 'react-icons/fi';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { ToastContainer, toast } from "react-toastify";
+import Swal from "sweetalert2";
+import {
+  FiSearch,
+  FiPlus,
+  FiFilter,
+  FiArrowUp,
+  FiEye,
+  FiEdit,
+  FiTrash2,
+  FiUsers,
+  FiTrendingUp,
+} from "react-icons/fi";
+import "react-toastify/dist/ReactToastify.css";
+import { useLocation } from "react-router-dom";
 
 function Home() {
   const [employees, setEmployees] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterDepartment, setFilterDepartment] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterDepartment, setFilterDepartment] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
     total: 0,
     departments: 0,
-    newThisMonth: 0
+    newThisMonth: 0,
   });
-
+  const location = useLocation();
   const [showGoTop, setShowGoTop] = useState(false);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  useEffect(() => {
+    if (location.state && location.state.toast) {
+      const { type, message } = location.state.toast;
+      toast[type](message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,19 +64,19 @@ function Home() {
     try {
       const res = await axios.get("http://localhost:5000/employees");
       setEmployees(res.data);
-      
+
       // Calculate stats
-      const departments = new Set(res.data.map(emp => emp.department));
+      const departments = new Set(res.data.map((emp) => emp.department));
       const thisMonth = new Date();
       thisMonth.setDate(1);
-      const newThisMonth = res.data.filter(emp => 
-        new Date(emp.hireDate) >= thisMonth
+      const newThisMonth = res.data.filter(
+        (emp) => new Date(emp.hireDate) >= thisMonth
       ).length;
-      
+
       setStats({
         total: res.data.length,
         departments: departments.size,
-        newThisMonth
+        newThisMonth,
       });
     } catch (err) {
       console.error("Error fetching employees:", err);
@@ -67,62 +93,64 @@ function Home() {
     }
   };
 
-const deleteEmployee = async (id) => {
-  const result = await Swal.fire({
-    title: 'Are you sure?',
-    text: "This action cannot be undone. Do you really want to delete this employee ?",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'Cancel',
-    background: '#fff',
-  });
+  const deleteEmployee = async (id) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This action cannot be undone. Do you really want to delete this employee ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      background: "#fff",
+    });
 
-  if (result.isConfirmed) {
-    try {
-      await axios.delete(`http://localhost:5000/employees/${id}`);
-      toast.success("Employee deleted successfully", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`http://localhost:5000/employees/${id}`);
+        toast.success("Employee deleted successfully", {
+          position: "top-right",
+          autoClose: 3000,
+        });
 
-      getEmployees();
+        getEmployees();
 
-      Swal.fire({
-        title: 'Deleted!',
-        text: 'Employee has been removed.',
-        icon: 'success',
-        timer: 2000,
-        showConfirmButton: false
-      });
-    } catch (err) {
-      console.error("Error deleting employee:", err);
-      toast.error("Failed to delete employee");
+        Swal.fire({
+          title: "Deleted!",
+          text: "Employee has been removed.",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } catch (err) {
+        console.error("Error deleting employee:", err);
+        toast.error("Failed to delete employee");
+      }
     }
-  }
-};
-
+  };
 
   useEffect(() => {
     getEmployees();
   }, []);
 
-  const filteredEmployees = employees.filter(emp => {
-    const matchesSearch = 
+  const filteredEmployees = employees.filter((emp) => {
+    const matchesSearch =
       emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       emp.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       emp.jobTitle.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesDepartment = 
-      filterDepartment === 'all' || 
+
+    const matchesDepartment =
+      filterDepartment === "all" ||
       emp.department.toLowerCase() === filterDepartment.toLowerCase();
-    
+
     return matchesSearch && matchesDepartment;
   });
 
-  const departments = ['all', ...new Set(employees.map(emp => emp.department))];
+  const departments = [
+    "all",
+    ...new Set(employees.map((emp) => emp.department)),
+  ];
 
   const StatCard = ({ icon, title, value, color }) => (
     <motion.div
@@ -134,9 +162,11 @@ const deleteEmployee = async (id) => {
       <div className="d-flex align-items-center justify-content-between">
         <div>
           <p className="text-muted mb-1 fw-medium">{title}</p>
-          <h3 className="mb-0 fw-bold" style={{ color }}>{value}</h3>
+          <h3 className="mb-0 fw-bold" style={{ color }}>
+            {value}
+          </h3>
         </div>
-        <div 
+        <div
           className="p-3 rounded-circle"
           style={{ background: `${color}20`, color }}
         >
@@ -368,7 +398,6 @@ const deleteEmployee = async (id) => {
       >
         <FiArrowUp size={24} />
       </button>
-      
     </div>
   );
 }

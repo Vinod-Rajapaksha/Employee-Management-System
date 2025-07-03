@@ -1,14 +1,14 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FiHome, 
-  FiUsers, 
-  FiSettings, 
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FiHome,
+  FiUsers,
+  FiSettings,
   FiCalendar,
   FiPieChart,
-  FiLogOut
-} from 'react-icons/fi';
+  FiLogOut,
+} from "react-icons/fi";
 
 const Sidebar = ({ isOpen, closeSidebar }) => {
   const location = useLocation();

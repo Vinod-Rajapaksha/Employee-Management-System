@@ -140,11 +140,14 @@ function EditEmployee() {
     setIsSubmitting(true);
     try {
       await axios.put(`http://localhost:5000/employees/${id}`, formData);
-      toast.success("Employee updated successfully!", {
-        position: "top-right",
-        autoClose: 3000,
+      navigate(`/view/${id}`, {
+        state: {
+          toast: {
+            type: "success",
+            message: "Employee updated successfully!",
+          },
+        },
       });
-      navigate(`/view/${id}`);
     } catch (err) {
       console.error("Error updating employee:", err);
       toast.error("Failed to update employee. Please try again.", {

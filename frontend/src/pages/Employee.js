@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { FiEye, FiEdit, FiTrash2, FiSearch } from 'react-icons/fi';
-import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
-import Swal from 'sweetalert2';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { FiEye, FiEdit, FiTrash2, FiSearch } from "react-icons/fi";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import Swal from "sweetalert2";
+import "react-toastify/dist/ReactToastify.css";
 
 const Employee = () => {
   const [employees, setEmployees] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterDepartment, setFilterDepartment] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterDepartment, setFilterDepartment] = useState("all");
 
   const getEmployees = async () => {
     setIsLoading(true);
@@ -35,15 +35,15 @@ const Employee = () => {
 
   const deleteEmployee = async (id) => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "This action cannot be undone. Do you really want to delete this employee?",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel',
-      background: '#fff',
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      background: "#fff",
     });
 
     if (result.isConfirmed) {
@@ -57,11 +57,11 @@ const Employee = () => {
         getEmployees();
 
         Swal.fire({
-          title: 'Deleted!',
-          text: 'Employee has been removed.',
-          icon: 'success',
+          title: "Deleted!",
+          text: "Employee has been removed.",
+          icon: "success",
           timer: 2000,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
       } catch (err) {
         console.error("Error deleting employee:", err);
@@ -75,20 +75,23 @@ const Employee = () => {
   }, []);
 
   // Filter employees based on search term and department
-  const filteredEmployees = employees.filter(emp => {
-    const matchesSearch = 
+  const filteredEmployees = employees.filter((emp) => {
+    const matchesSearch =
       emp.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       emp.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       emp.jobTitle?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesDepartment = 
-      filterDepartment === 'all' || 
+
+    const matchesDepartment =
+      filterDepartment === "all" ||
       emp.department?.toLowerCase() === filterDepartment.toLowerCase();
-    
+
     return matchesSearch && matchesDepartment;
   });
 
-  const departments = ['all', ...new Set(employees.map(emp => emp.department).filter(Boolean))];
+  const departments = [
+    "all",
+    ...new Set(employees.map((emp) => emp.department).filter(Boolean)),
+  ];
 
   return (
     <div className="container-fluid">
@@ -169,10 +172,9 @@ const Employee = () => {
             </div>
             <h4 className="text-muted">No employees found</h4>
             <p className="text-muted">
-              {employees.length === 0 
-                ? "No employees have been added yet" 
-                : "Try adjusting your search criteria"
-              }
+              {employees.length === 0
+                ? "No employees have been added yet"
+                : "Try adjusting your search criteria"}
             </p>
           </motion.div>
         ) : (
@@ -207,7 +209,7 @@ const Employee = () => {
                             fontSize: "16px",
                           }}
                         >
-                          {emp.name?.charAt(0).toUpperCase() || '?'}
+                          {emp.name?.charAt(0).toUpperCase() || "?"}
                         </div>
                         <div>
                           <Link
@@ -215,21 +217,29 @@ const Employee = () => {
                             className="text-decoration-none fw-bold"
                             style={{ color: "var(--text-color)" }}
                           >
-                            {emp.name || 'Unknown'}
+                            {emp.name || "Unknown"}
                           </Link>
-                          <div className="text-muted small">{emp.email || ''}</div>
+                          <div className="text-muted small">
+                            {emp.email || ""}
+                          </div>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <div className="text-muted small">📧 {emp.email || 'N/A'}</div>
-                      <div className="text-muted small">📱 {emp.phone || 'N/A'}</div>
+                      <div className="text-muted small">
+                        📧 {emp.email || "N/A"}
+                      </div>
+                      <div className="text-muted small">
+                        📱 {emp.phone || "N/A"}
+                      </div>
                     </td>
                     <td>
-                      <div className="fw-medium">{emp.jobTitle || 'N/A'}</div>
+                      <div className="fw-medium">{emp.jobTitle || "N/A"}</div>
                     </td>
                     <td>
-                      <span className="badge bg-info">{emp.department || 'N/A'}</span>
+                      <span className="badge bg-info">
+                        {emp.department || "N/A"}
+                      </span>
                     </td>
                     <td>
                       <div className="d-flex gap-2">
@@ -251,7 +261,7 @@ const Employee = () => {
                           onClick={() => deleteEmployee(emp._id)}
                           className="btn-modern btn-danger btn-sm"
                           title="Delete Employee"
-                          aria-label={`Delete ${emp.name || 'employee'}`}
+                          aria-label={`Delete ${emp.name || "employee"}`}
                         >
                           <FiTrash2 size={14} />
                         </button>

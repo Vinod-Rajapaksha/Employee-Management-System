@@ -115,15 +115,15 @@ function AddEmployee() {
     setIsSubmitting(true);
     try {
       await axios.post("http://localhost:5000/employees", formData);
-      toast.success("Employee added successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
+      // Pass a toast instruction to Home
+      navigate("/", {
+        state: {
+          toast: {
+            type: "success",
+            message: "Employee added successfully!",
+          },
+        },
       });
-      navigate("/");
     } catch (err) {
       console.error("Error adding employee:", err);
       toast.error("Failed to add employee. Please try again.", {

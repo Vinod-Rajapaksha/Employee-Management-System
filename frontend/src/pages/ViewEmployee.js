@@ -1,11 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { toast } from 'react-toastify';
-import Swal from 'sweetalert2';
-import { FiUser, FiMail, FiArrowUp, FiPhone, FiBriefcase, FiHome, FiCalendar, FiArrowLeft, FiEdit, FiTrash2,FiClock,FiAward} from 'react-icons/fi';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { ToastContainer, toast } from "react-toastify";
+import Swal from "sweetalert2";
+import {
+  FiUser,
+  FiMail,
+  FiArrowUp,
+  FiPhone,
+  FiBriefcase,
+  FiHome,
+  FiCalendar,
+  FiArrowLeft,
+  FiEdit,
+  FiTrash2,
+  FiClock,
+  FiAward,
+} from "react-icons/fi";
+import "react-toastify/dist/ReactToastify.css";
+import { useLocation } from "react-router-dom";
 
 function ViewEmployee() {
   const [employee, setEmployee] = useState(null);
@@ -13,6 +27,7 @@ function ViewEmployee() {
   const [isDeleting, setIsDeleting] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [showGoTop, setShowGoTop] = useState(false);
 
@@ -29,6 +44,20 @@ function ViewEmployee() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (location.state && location.state.toast) {
+      const { type, message } = location.state.toast;
+      toast[type](message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      window.history.replaceState({}, document.title);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchEmployee = async () => {
@@ -50,58 +79,67 @@ function ViewEmployee() {
   }, [id]);
 
   const handleDelete = async () => {
-  const result = await Swal.fire({
-    title: 'Are you sure?',
-    text: "This action cannot be undone. Do you really want to delete this employee ?",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'Cancel',
-    background: '#fff'
-  });
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This action cannot be undone. Do you really want to delete this employee ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      background: "#fff",
+    });
 
-  if (result.isConfirmed) {
-    setIsDeleting(true);
-    try {
-      await axios.delete(`http://localhost:5000/employees/${id}`);
-      toast.success("Employee deleted successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+    if (result.isConfirmed) {
+      setIsDeleting(true);
+      try {
+        await axios.delete(`http://localhost:5000/employees/${id}`);
+        toast.success("Employee deleted successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
 
-      Swal.fire({
-        title: 'Deleted!',
-        text: 'The employee has been removed.',
-        icon: 'success',
-        timer: 2000,
-        showConfirmButton: false
-      });
+        Swal.fire({
+          title: "Deleted!",
+          text: "The employee has been removed.",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false,
+        });
 
-      navigate('/');
-    } catch (err) {
-      console.error("Error deleting employee:", err);
-      toast.error("Failed to delete employee. Please try again.");
-      setIsDeleting(false);
+        navigate("/");
+      } catch (err) {
+        console.error("Error deleting employee:", err);
+        toast.error("Failed to delete employee. Please try again.");
+        setIsDeleting(false);
+      }
     }
-  }
-};
+  };
 
   if (isLoading) {
     return (
       <div className="container-fluid">
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '60vh' }}>
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ minHeight: "60vh" }}
+        >
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center"
           >
-            <div className="spinner-border text-primary mb-3" role="status" style={{ width: '3rem', height: '3rem' }}>
+            <div
+              className="spinner-border text-primary mb-3"
+              role="status"
+              style={{ width: "3rem", height: "3rem" }}
+            >
               <span className="visually-hidden">Loading...</span>
             </div>
             <h5 className="text-muted">Loading employee details...</h5>
-            <p className="text-muted small">Please wait while we fetch the information</p>
+            <p className="text-muted small">
+              Please wait while we fetch the information
+            </p>
           </motion.div>
         </div>
       </div>
@@ -116,9 +154,14 @@ function ViewEmployee() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center py-5"
         >
-          <div className="mb-4" style={{ fontSize: '4rem' }}>😕</div>
+          <div className="mb-4" style={{ fontSize: "4rem" }}>
+            😕
+          </div>
           <h3 className="text-danger mb-3">Employee Not Found</h3>
-          <p className="text-muted mb-4">The employee you're looking for doesn't exist or may have been removed.</p>
+          <p className="text-muted mb-4">
+            The employee you're looking for doesn't exist or may have been
+            removed.
+          </p>
           <Link to="/" className="btn-modern btn-primary">
             <FiArrowLeft size={16} className="me-2" />
             Back to Employee List
@@ -129,7 +172,7 @@ function ViewEmployee() {
   }
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -140,23 +183,22 @@ function ViewEmployee() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     const years = Math.floor(diffDays / 365);
     const months = Math.floor((diffDays % 365) / 30);
-    
+
     if (years > 0) {
-      return `${years} year${years > 1 ? 's' : ''} ${months > 0 ? `${months} month${months > 1 ? 's' : ''}` : ''}`;
+      return `${years} year${years > 1 ? "s" : ""} ${
+        months > 0 ? `${months} month${months > 1 ? "s" : ""}` : ""
+      }`;
     } else if (months > 0) {
-      return `${months} month${months > 1 ? 's' : ''}`;
+      return `${months} month${months > 1 ? "s" : ""}`;
     } else {
-      return `${diffDays} day${diffDays > 1 ? 's' : ''}`;
+      return `${diffDays} day${diffDays > 1 ? "s" : ""}`;
     }
   };
 
   const InfoCard = ({ icon, label, value, color = "var(--primary)" }) => (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      className="glass-card p-4 h-100"
-    >
+    <motion.div whileHover={{ scale: 1.02 }} className="glass-card p-4 h-100">
       <div className="d-flex align-items-center mb-2">
-        <div 
+        <div
           className="p-2 rounded-circle me-3"
           style={{ background: `${color}20`, color }}
         >
@@ -409,6 +451,19 @@ function ViewEmployee() {
           </a>
         </div>
       </motion.div>
+
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
 
       <button
         className={`fab ${showGoTop ? "" : "fab-hidden"}`}

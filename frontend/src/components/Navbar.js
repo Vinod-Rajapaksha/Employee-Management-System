@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { FiMenu, FiSun, FiMoon, FiBell, FiSettings } from 'react-icons/fi';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { FiMenu, FiSun, FiMoon, FiBell, FiSettings } from "react-icons/fi";
 
 const Navbar = ({ toggleSidebar }) => {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState("light");
   const [notifications] = useState(3); // Mock notification count
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.documentElement.setAttribute("data-theme", savedTheme);
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
+    const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
   };
 
   return (
-    <motion.nav 
+    <motion.nav
       className="navbar"
       initial={{ y: -80 }}
       animate={{ y: 0 }}
@@ -36,13 +36,13 @@ const Navbar = ({ toggleSidebar }) => {
         >
           <FiMenu size={20} />
         </motion.button>
-          
+
         <Link to="/" className="logo">
-            🏢
+          🏢
           <span>Employee Management System</span>
         </Link>
       </div>
-      
+
       <div className="navbar-right">
         <motion.button
           className="menu-toggle-btn position-relative"
@@ -51,9 +51,9 @@ const Navbar = ({ toggleSidebar }) => {
         >
           <FiBell size={20} />
           {notifications > 0 && (
-            <span 
+            <span
               className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-              style={{ fontSize: '10px' }}
+              style={{ fontSize: "10px" }}
             >
               {notifications}
             </span>
@@ -77,31 +77,33 @@ const Navbar = ({ toggleSidebar }) => {
 
 const ThemeToggle = ({ theme, toggleTheme }) => {
   return (
-    <motion.div 
+    <motion.div
       className="theme-toggle"
       onClick={toggleTheme}
       whileTap={{ scale: 0.9 }}
     >
-      <motion.div 
+      <motion.div
         className="theme-toggle-handle"
-        animate={{ x: theme === 'dark' ? 30 : 0 }}
+        animate={{ x: theme === "dark" ? 30 : 0 }}
         transition={{ type: "spring", stiffness: 500, damping: 30 }}
       />
-      <span className="sun"><FiSun size={14} /></span>
-      <span className="moon"><FiMoon size={14} /></span>
+      <span className="sun">
+        <FiSun size={14} />
+      </span>
+      <span className="moon">
+        <FiMoon size={14} />
+      </span>
     </motion.div>
   );
 };
 
 const UserProfile = () => {
   return (
-    <motion.div 
+    <motion.div
       className="user-profile status-online"
       whileHover={{ scale: 1.05 }}
     >
-      <div className="avatar-gradient">
-        A
-      </div>
+      <div className="avatar-gradient">A</div>
       <span className="fw-medium">Admin</span>
     </motion.div>
   );

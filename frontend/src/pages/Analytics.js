@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FiUsers,
   FiFilter,
@@ -10,15 +10,25 @@ import {
   FiBarChart2,
   FiRefreshCw,
   FiChevronDown,
-  FiChevronUp
-} from 'react-icons/fi';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+  FiChevronUp,
+} from "react-icons/fi";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  PieChart, Pie, Cell, LabelList
-} from 'recharts';
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LabelList,
+} from "recharts";
 
 // StatCard Component
 const StatCard = ({ icon, title, value, color, trend, onClick, loading }) => (
@@ -31,7 +41,7 @@ const StatCard = ({ icon, title, value, color, trend, onClick, loading }) => (
     style={{
       background: `linear-gradient(135deg, ${color}15, ${color}05)`,
       borderLeft: `4px solid ${color}`,
-      cursor: onClick ? 'pointer' : 'default'
+      cursor: onClick ? "pointer" : "default",
     }}
     onClick={onClick}
   >
@@ -40,14 +50,30 @@ const StatCard = ({ icon, title, value, color, trend, onClick, loading }) => (
         <p className="text-muted mb-1 fw-medium small">{title}</p>
         {loading ? (
           <div className="placeholder-glow">
-            <h3 className="mb-0 fw-bold placeholder" style={{ width: '80px', height: '32px' }}></h3>
+            <h3
+              className="mb-0 fw-bold placeholder"
+              style={{ width: "80px", height: "32px" }}
+            ></h3>
           </div>
         ) : (
           <>
-            <h3 className="mb-0 fw-bold" style={{ color }}>{value}</h3>
+            <h3 className="mb-0 fw-bold" style={{ color }}>
+              {value}
+            </h3>
             {trend && (
-              <small className={`d-flex align-items-center mt-1 ${trend.value > 0 ? 'text-success' : 'text-danger'}`}>
-                {trend.value > 0 ? <FiTrendingUp className="me-1" /> : <FiTrendingUp className="me-1" style={{ transform: 'rotate(180deg)' }} />}
+              <small
+                className={`d-flex align-items-center mt-1 ${
+                  trend.value > 0 ? "text-success" : "text-danger"
+                }`}
+              >
+                {trend.value > 0 ? (
+                  <FiTrendingUp className="me-1" />
+                ) : (
+                  <FiTrendingUp
+                    className="me-1"
+                    style={{ transform: "rotate(180deg)" }}
+                  />
+                )}
                 {Math.abs(trend.value)}% {trend.label}
               </small>
             )}
@@ -59,8 +85,8 @@ const StatCard = ({ icon, title, value, color, trend, onClick, loading }) => (
         style={{
           background: `${color}15`,
           color,
-          width: '48px',
-          height: '48px'
+          width: "48px",
+          height: "48px",
         }}
       >
         {icon}
@@ -72,11 +98,11 @@ const StatCard = ({ icon, title, value, color, trend, onClick, loading }) => (
 // TimeRangeSelector Component
 const TimeRangeSelector = ({ value, onChange }) => {
   const ranges = [
-    { id: 'day', label: 'Today' },
-    { id: 'week', label: 'Week' },
-    { id: 'month', label: 'Month' },
-    { id: 'quarter', label: 'Quarter' },
-    { id: 'year', label: 'Year' }
+    { id: "day", label: "Today" },
+    { id: "week", label: "Week" },
+    { id: "month", label: "Month" },
+    { id: "quarter", label: "Quarter" },
+    { id: "year", label: "Year" },
   ];
 
   return (
@@ -86,7 +112,7 @@ const TimeRangeSelector = ({ value, onChange }) => {
           key={range.id}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className={`time-range-btn ${value === range.id ? 'active' : ''}`}
+          className={`time-range-btn ${value === range.id ? "active" : ""}`}
           onClick={() => onChange(range.id)}
         >
           {range.label}
@@ -95,7 +121,7 @@ const TimeRangeSelector = ({ value, onChange }) => {
               className="underline"
               layoutId="underline"
               initial={false}
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+              transition={{ type: "spring", stiffness: 500, damping: 30 }}
             />
           )}
         </motion.button>
@@ -107,9 +133,9 @@ const TimeRangeSelector = ({ value, onChange }) => {
 // AnalyticsTabs Component
 const AnalyticsTabs = ({ activeTab, setActiveTab }) => {
   const tabs = [
-    { id: 'overview', icon: <FiBarChart2 />, label: 'Overview' },
-    { id: 'charts', icon: <FiPieChart />, label: 'Charts' },
-    { id: 'details', icon: <FiUsers />, label: 'Details' }
+    { id: "overview", icon: <FiBarChart2 />, label: "Overview" },
+    { id: "charts", icon: <FiPieChart />, label: "Charts" },
+    { id: "details", icon: <FiUsers />, label: "Details" },
   ];
 
   return (
@@ -117,9 +143,9 @@ const AnalyticsTabs = ({ activeTab, setActiveTab }) => {
       {tabs.map((tab) => (
         <motion.button
           key={tab.id}
-          className={`tab ${activeTab === tab.id ? 'active' : ''}`}
+          className={`tab ${activeTab === tab.id ? "active" : ""}`}
           onClick={() => setActiveTab(tab.id)}
-          whileHover={{ backgroundColor: 'rgba(0,0,0,0.05)' }}
+          whileHover={{ backgroundColor: "rgba(0,0,0,0.05)" }}
         >
           <span className="tab-icon">{tab.icon}</span>
           <span className="tab-label">{tab.label}</span>
@@ -128,7 +154,7 @@ const AnalyticsTabs = ({ activeTab, setActiveTab }) => {
               className="tab-indicator"
               layoutId="tabIndicator"
               initial={false}
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+              transition={{ type: "spring", stiffness: 500, damping: 30 }}
             />
           )}
         </motion.button>
@@ -148,25 +174,25 @@ const DepartmentFilter = ({ value, options, onChange }) => {
         onClick={() => setExpanded(!expanded)}
         type="button"
       >
-        <span>Department: {value === 'all' ? 'All' : value}</span>
+        <span>Department: {value === "all" ? "All" : value}</span>
         {expanded ? <FiChevronUp /> : <FiChevronDown />}
       </motion.button>
       <AnimatePresence>
         {expanded && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="filter-options"
           >
             <motion.button
               key="all"
-              className={`filter-option ${value === 'all' ? 'active' : ''}`}
+              className={`filter-option ${value === "all" ? "active" : ""}`}
               onClick={() => {
-                onChange('all');
+                onChange("all");
                 setExpanded(false);
               }}
-              whileHover={{ backgroundColor: 'rgba(0,0,0,0.05)' }}
+              whileHover={{ backgroundColor: "rgba(0,0,0,0.05)" }}
               type="button"
             >
               All Departments
@@ -174,12 +200,12 @@ const DepartmentFilter = ({ value, options, onChange }) => {
             {options.map((dept) => (
               <motion.button
                 key={dept}
-                className={`filter-option ${value === dept ? 'active' : ''}`}
+                className={`filter-option ${value === dept ? "active" : ""}`}
                 onClick={() => {
                   onChange(dept);
                   setExpanded(false);
                 }}
-                whileHover={{ backgroundColor: 'rgba(0,0,0,0.05)' }}
+                whileHover={{ backgroundColor: "rgba(0,0,0,0.05)" }}
                 type="button"
               >
                 {dept}
@@ -201,20 +227,27 @@ const Analytics = () => {
     newThisMonth: 0,
     avgSalary: 0,
     salaryExpense: 0,
-    activeProjects: 0
+    activeProjects: 0,
   });
   const [loading, setLoading] = useState(true);
-  const [timeRange, setTimeRange] = useState('month');
-  const [departmentFilter, setDepartmentFilter] = useState('all');
-  const [activeTab, setActiveTab] = useState('overview');
+  const [timeRange, setTimeRange] = useState("month");
+  const [departmentFilter, setDepartmentFilter] = useState("all");
+  const [activeTab, setActiveTab] = useState("overview");
   const [departmentData, setDepartmentData] = useState([]);
   const [hiringTrend, setHiringTrend] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [allDepartments, setAllDepartments] = useState([]);
   const pageSize = 5;
 
-  const COLORS = ['#6366F1', '#8B5CF6', '#EC4899', '#F43F5E', '#F59E0B', '#10B981'];
+  const COLORS = [
+    "#6366F1",
+    "#8B5CF6",
+    "#EC4899",
+    "#F43F5E",
+    "#F59E0B",
+    "#10B981",
+  ];
 
   // Store all employees for filter reference
   const [allEmployees, setAllEmployees] = useState([]);
@@ -227,14 +260,14 @@ const Analytics = () => {
       setAllEmployees(data);
 
       // Get all departments from the full data (not filtered)
-      const departmentsSet = new Set(data.map(emp => emp.department));
+      const departmentsSet = new Set(data.map((emp) => emp.department));
       setAllDepartments(Array.from(departmentsSet));
 
       // Filter by department if needed
       const filteredData =
-        departmentFilter === 'all'
+        departmentFilter === "all"
           ? data
-          : data.filter(emp => emp.department === departmentFilter);
+          : data.filter((emp) => emp.department === departmentFilter);
 
       // Calculate departments (use all departments, not filtered)
       // const departments = new Set(data.map((emp) => emp.department));
@@ -316,7 +349,7 @@ const Analytics = () => {
 
   const handleRefresh = () => {
     fetchStats();
-    toast.info('Data refreshed', {
+    toast.info("Data refreshed", {
       position: "top-right",
       autoClose: 2000,
     });
@@ -332,8 +365,8 @@ const Analytics = () => {
 
   const handleDepartmentFilter = (dept) => {
     setDepartmentFilter(dept);
-    if (dept === 'all') {
-      toast.info('Showing all departments', {
+    if (dept === "all") {
+      toast.info("Showing all departments", {
         position: "top-right",
         autoClose: 2000,
       });
@@ -346,25 +379,29 @@ const Analytics = () => {
   };
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   };
 
   // Filter employees by search term
-  const filteredEmployees = employees.filter(emp =>
-    emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    emp.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    emp.jobTitle?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredEmployees = employees.filter(
+    (emp) =>
+      emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.jobTitle?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Pagination
   const totalEntries = filteredEmployees.length;
   const totalPages = Math.ceil(totalEntries / pageSize);
-  const currentEmployees = filteredEmployees.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const currentEmployees = filteredEmployees.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
@@ -381,7 +418,9 @@ const Analytics = () => {
       >
         <div>
           <h2 className="gradient-text">Employee Analytics</h2>
-          <p className="text-muted">Insights and metrics about your workforce</p>
+          <p className="text-muted">
+            Insights and metrics about your workforce
+          </p>
         </div>
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -390,16 +429,13 @@ const Analytics = () => {
           onClick={handleRefresh}
           disabled={loading}
         >
-          <FiRefreshCw className={`refresh-icon ${loading ? 'spin' : ''}`} />
-          {loading ? 'Refreshing...' : 'Refresh Data'}
+          <FiRefreshCw className={`refresh-icon ${loading ? "spin" : ""}`} />
+          {loading ? "Refreshing..." : "Refresh Data"}
         </motion.button>
       </motion.div>
 
       <div className="controls-row">
-        <TimeRangeSelector
-          value={timeRange}
-          onChange={handleTimeRangeChange}
-        />
+        <TimeRangeSelector value={timeRange} onChange={handleTimeRangeChange} />
 
         {!loading && (
           <DepartmentFilter
@@ -410,10 +446,7 @@ const Analytics = () => {
         )}
       </div>
 
-      <AnalyticsTabs
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
+      <AnalyticsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {loading ? (
         <div className="loading-state">
@@ -426,14 +459,14 @@ const Analytics = () => {
         </div>
       ) : (
         <>
-          {activeTab === 'overview' && (
+          {activeTab === "overview" && (
             <div className="stats-grid">
               <StatCard
                 icon={<FiUsers size={20} />}
                 title="Total Employees"
                 value={stats.total}
                 color="#6366F1"
-                trend={{ value: 5.2, label: 'vs last month' }}
+                trend={{ value: 5.2, label: "vs last month" }}
                 loading={loading}
               />
               <StatCard
@@ -448,7 +481,7 @@ const Analytics = () => {
                 title="New Hires"
                 value={stats.newThisMonth}
                 color="#EC4899"
-                trend={{ value: 12.8, label: 'vs last month' }}
+                trend={{ value: 12.8, label: "vs last month" }}
                 loading={loading}
               />
               <StatCard
@@ -456,7 +489,7 @@ const Analytics = () => {
                 title="Avg Salary"
                 value={formatCurrency(stats.avgSalary)}
                 color="#10B981"
-                trend={{ value: 3.5, label: 'vs last quarter' }}
+                trend={{ value: 3.5, label: "vs last quarter" }}
                 loading={loading}
               />
               <StatCard
@@ -471,13 +504,13 @@ const Analytics = () => {
                 title="Active Projects"
                 value={stats.activeProjects}
                 color="#F43F5E"
-                trend={{ value: 8.1, label: 'vs last month' }}
+                trend={{ value: 8.1, label: "vs last month" }}
                 loading={loading}
               />
             </div>
           )}
 
-          {activeTab === 'charts' && (
+          {activeTab === "charts" && (
             <div className="charts-container">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -502,10 +535,17 @@ const Analytics = () => {
                         outerRadius={120}
                         paddingAngle={2}
                         dataKey="value"
-                        label={({ name, percent }) => `${name} : ${(percent * 100).toFixed(0)}%`}
+                        label={({ name, percent }) =>
+                          `${name} : ${(percent * 100).toFixed(0)}%`
+                        }
                       >
                         {departmentData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fontSize={13} fontWeight={"bold"} fill={COLORS[index % COLORS.length]} />
+                          <Cell
+                            key={`cell-${index}`}
+                            fontSize={13}
+                            fontWeight={"bold"}
+                            fill={COLORS[index % COLORS.length]}
+                          />
                         ))}
                         <LabelList
                           dataKey="value"
@@ -515,19 +555,19 @@ const Analytics = () => {
                         />
                       </Pie>
                       <Tooltip
-                        formatter={(value) => [`${value} employees`, 'Count']}
+                        formatter={(value) => [`${value} employees`, "Count"]}
                         contentStyle={{
-                          background: 'rgba(255, 255, 255, 0.9)',
-                          border: 'none',
-                          borderRadius: '8px',
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                          background: "rgba(255, 255, 255, 0.9)",
+                          border: "none",
+                          borderRadius: "8px",
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                         }}
                       />
                       <Legend
                         layout="horizontal"
                         verticalAlign="bottom"
                         align="center"
-                        wrapperStyle={{ paddingTop: '20px' }}
+                        wrapperStyle={{ paddingTop: "20px" }}
                       />
                     </PieChart>
                   </ResponsiveContainer>
@@ -558,24 +598,19 @@ const Analytics = () => {
                       }}
                     >
                       <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                      <XAxis
-                        dataKey="name"
-                        tick={{ fill: '#6B7280' }}
-                      />
-                      <YAxis
-                        tick={{ fill: '#6B7280' }}
-                      />
+                      <XAxis dataKey="name" tick={{ fill: "#6B7280" }} />
+                      <YAxis tick={{ fill: "#6B7280" }} />
                       <Tooltip
                         contentStyle={{
-                          background: 'rgba(255, 255, 255, 0.9)',
-                          border: 'none',
-                          borderRadius: '8px',
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                          background: "rgba(255, 255, 255, 0.9)",
+                          border: "none",
+                          borderRadius: "8px",
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                         }}
                       />
                       <Legend
                         wrapperStyle={{
-                          paddingTop: '20px'
+                          paddingTop: "20px",
                         }}
                       />
                       <Bar
@@ -598,7 +633,7 @@ const Analytics = () => {
             </div>
           )}
 
-          {activeTab === 'details' && (
+          {activeTab === "details" && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -613,7 +648,7 @@ const Analytics = () => {
                     placeholder="Search employees..."
                     className="search-input"
                     value={searchTerm}
-                    onChange={e => {
+                    onChange={(e) => {
                       setSearchTerm(e.target.value);
                       setCurrentPage(1);
                     }}
@@ -633,7 +668,9 @@ const Analytics = () => {
                   <tbody>
                     {currentEmployees.length === 0 ? (
                       <tr>
-                        <td colSpan={4} style={{ textAlign: "center" }}>No employees found</td>
+                        <td colSpan={4} style={{ textAlign: "center" }}>
+                          No employees found
+                        </td>
                       </tr>
                     ) : (
                       currentEmployees.map((emp) => (
@@ -641,15 +678,26 @@ const Analytics = () => {
                           key={emp.id}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
-                          whileHover={{ backgroundColor: 'rgba(0,0,0,0.02)' }}
+                          whileHover={{ backgroundColor: "rgba(0,0,0,0.02)" }}
                         >
                           <td>{emp.name}</td>
                           <td>
                             <span
                               className="dept-badge"
                               style={{
-                                backgroundColor: `${COLORS[allDepartments.findIndex(d => d === emp.department) % COLORS.length]}20`,
-                                color: COLORS[allDepartments.findIndex(d => d === emp.department) % COLORS.length]
+                                backgroundColor: `${
+                                  COLORS[
+                                    allDepartments.findIndex(
+                                      (d) => d === emp.department
+                                    ) % COLORS.length
+                                  ]
+                                }20`,
+                                color:
+                                  COLORS[
+                                    allDepartments.findIndex(
+                                      (d) => d === emp.department
+                                    ) % COLORS.length
+                                  ],
                               }}
                             >
                               {emp.department}
@@ -666,11 +714,19 @@ const Analytics = () => {
               <div className="table-footer">
                 <div className="showing-entries">
                   {totalEntries > 0
-                    ? `Showing ${(currentPage - 1) * pageSize + 1} to ${Math.min(currentPage * pageSize, totalEntries)} of ${totalEntries} entries`
-                    : 'No entries to show'}
+                    ? `Showing ${
+                        (currentPage - 1) * pageSize + 1
+                      } to ${Math.min(
+                        currentPage * pageSize,
+                        totalEntries
+                      )} of ${totalEntries} entries`
+                    : "No entries to show"}
                 </div>
                 <div className="pagination">
-                  <button className={`prev-btn me-4${currentPage === 1 ? ' disabled' : ''}`}
+                  <button
+                    className={`prev-btn me-4${
+                      currentPage === 1 ? " disabled" : ""
+                    }`}
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
@@ -679,13 +735,18 @@ const Analytics = () => {
                   {Array.from({ length: totalPages }).map((_, idx) => (
                     <button
                       key={idx + 1}
-                      className={`page-btn${currentPage === idx + 1 ? ' active' : ''}`}
+                      className={`page-btn${
+                        currentPage === idx + 1 ? " active" : ""
+                      }`}
                       onClick={() => handlePageChange(idx + 1)}
                     >
                       {idx + 1}
                     </button>
                   ))}
-                  <button className={`next-btn ms-2${currentPage === totalPages ? ' disabled' : ''}`}
+                  <button
+                    className={`next-btn ms-2${
+                      currentPage === totalPages ? " disabled" : ""
+                    }`}
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                   >
