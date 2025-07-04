@@ -6,6 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { ToastContainer } from "react-toastify";
 import Home from "./pages/Home";
 import Analytics from "./pages/Analytics";
 import Employee from "./pages/Employee";
@@ -15,6 +16,7 @@ import ViewEmployee from "./pages/ViewEmployee";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 const AppContent = () => {
@@ -126,6 +128,18 @@ const AppContent = () => {
 const App = () => (
   <Router>
     <AppContent />
+    <ToastContainer 
+      position="bottom-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+    />
   </Router>
 );
 

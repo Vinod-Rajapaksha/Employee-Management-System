@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiEye, FiEdit, FiTrash2, FiSearch } from "react-icons/fi";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import "react-toastify/dist/ReactToastify.css";
 
 const Employee = () => {
   const [employees, setEmployees] = useState([]);
@@ -20,14 +19,7 @@ const Employee = () => {
       setEmployees(res.data);
     } catch (err) {
       console.error("Error fetching employees:", err);
-      toast.error("Failed to load employees", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.error("Failed to load employees");
     } finally {
       setIsLoading(false);
     }
@@ -49,10 +41,7 @@ const Employee = () => {
     if (result.isConfirmed) {
       try {
         await axios.delete(`http://localhost:5000/employees/${id}`);
-        toast.success("Employee deleted successfully", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.success("Employee deleted successfully");
 
         getEmployees();
 
@@ -274,19 +263,6 @@ const Employee = () => {
           </div>
         )}
       </motion.div>
-
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </div>
   );
 };

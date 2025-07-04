@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import {
   FiUser,
@@ -18,7 +18,6 @@ import {
   FiClock,
   FiAward,
 } from "react-icons/fi";
-import "react-toastify/dist/ReactToastify.css";
 import { useLocation } from "react-router-dom";
 
 function ViewEmployee() {
@@ -47,17 +46,10 @@ function ViewEmployee() {
   useEffect(() => {
     if (location.state && location.state.toast) {
       const { type, message } = location.state.toast;
-      toast[type](message, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast[type](message);
       window.history.replaceState({}, document.title);
     }
-  }, []);
+  }, [location.state]);
 
   useEffect(() => {
     const fetchEmployee = async () => {
@@ -67,10 +59,7 @@ function ViewEmployee() {
         setEmployee(res.data);
       } catch (err) {
         console.error("Error loading employee:", err);
-        toast.error("Could not load employee details.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error("Could not load employee details.");
       } finally {
         setIsLoading(false);
       }
@@ -95,10 +84,7 @@ function ViewEmployee() {
       setIsDeleting(true);
       try {
         await axios.delete(`http://localhost:5000/employees/${id}`);
-        toast.success("Employee deleted successfully!", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.success("Employee deleted successfully!");
 
         Swal.fire({
           title: "Deleted!",
@@ -451,19 +437,6 @@ function ViewEmployee() {
           </a>
         </div>
       </motion.div>
-
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
 
       <button
         className={`fab ${showGoTop ? "" : "fab-hidden"}`}
