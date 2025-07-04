@@ -10,7 +10,6 @@ app.use(express.json());
 const employeeRoutes = require("./routes/employeeRoutes");
 app.use("/employees", employeeRoutes);
 
-
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
