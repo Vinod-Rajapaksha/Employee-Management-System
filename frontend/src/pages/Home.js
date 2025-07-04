@@ -15,8 +15,7 @@ import {
   FiUsers,
   FiTrendingUp,
 } from "react-icons/fi";
-
-import { useLocation } from "react-router-dom";
+import { useLocation , useNavigate } from "react-router-dom";
 
 function Home() {
   const [employees, setEmployees] = useState([]);
@@ -35,13 +34,20 @@ function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    if (location.state && location.state.toast) {
+    if (
+      location.state &&
+      location.state.toast &&
+      !window.sessionStorage.getItem("toastShown-" + location.key)
+    ) {
       const { type, message } = location.state.toast;
       toast[type](message);
-      window.history.replaceState({}, document.title);
+      window.sessionStorage.setItem("toastShown-" + location.key, "1");
+      navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [location.state]);
+  }, [navigate, location.pathname, location.state, location.key]);
 
   useEffect(() => {
     const handleScroll = () => {

@@ -44,12 +44,17 @@ function ViewEmployee() {
   }, []);
 
   useEffect(() => {
-    if (location.state && location.state.toast) {
+    if (
+      location.state &&
+      location.state.toast &&
+      !window.sessionStorage.getItem("toastShown-" + location.key)
+    ) {
       const { type, message } = location.state.toast;
       toast[type](message);
-      window.history.replaceState({}, document.title);
+      window.sessionStorage.setItem("toastShown-" + location.key, "1");
+      navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [location.state]);
+  }, [navigate, location.pathname, location.state, location.key]);
 
   useEffect(() => {
     const fetchEmployee = async () => {

@@ -15,7 +15,6 @@ import {
   FiArrowLeft,
   FiX,
 } from "react-icons/fi";
-import "react-toastify/dist/ReactToastify.css";
 
 function EditEmployee() {
   const [formData, setFormData] = useState({
@@ -74,10 +73,7 @@ function EditEmployee() {
         setOriginalData(employeeData);
       } catch (err) {
         console.error("Error loading employee:", err);
-        toast.error("Could not load employee data", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error("Could not load employee data");
         navigate("/");
       } finally {
         setIsLoading(false);
@@ -130,10 +126,7 @@ function EditEmployee() {
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      toast.error("Please fix the errors in the form", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error("Please fix the errors in the form");
       return;
     }
 
@@ -150,10 +143,7 @@ function EditEmployee() {
       });
     } catch (err) {
       console.error("Error updating employee:", err);
-      toast.error("Failed to update employee. Please try again.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error("Failed to update employee. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -162,10 +152,7 @@ function EditEmployee() {
   const handleReset = () => {
     setFormData(originalData);
     setErrors({});
-    toast.info("Form reset to original values", {
-      position: "top-right",
-      autoClose: 2000,
-    });
+    toast.info("Form reset to original values");
   };
 
   const hasChanges = () => {

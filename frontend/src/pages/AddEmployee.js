@@ -101,21 +101,13 @@ function AddEmployee() {
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      toast.error("Please fix the errors in the form", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.error("Please fix the errors in the form");
       return;
     }
 
     setIsSubmitting(true);
     try {
       await axios.post("http://localhost:5000/employees", formData);
-      // Pass a toast instruction to Home
       navigate("/", {
         state: {
           toast: {
@@ -126,10 +118,7 @@ function AddEmployee() {
       });
     } catch (err) {
       console.error("Error adding employee:", err);
-      toast.error("Failed to add employee. Please try again.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error("Failed to add employee. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

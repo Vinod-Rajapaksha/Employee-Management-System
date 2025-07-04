@@ -13,8 +13,7 @@ import {
   FiChevronUp,
 } from "react-icons/fi";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import {
   BarChart,
   Bar,
@@ -332,10 +331,7 @@ const Analytics = () => {
       setHiringTrend(hiringTrendData);
     } catch (err) {
       console.error("Failed to fetch stats:", err);
-      toast.error("Failed to fetch analytics data", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error("Failed to fetch analytics data");
     } finally {
       setLoading(false);
     }
@@ -343,38 +339,25 @@ const Analytics = () => {
 
   useEffect(() => {
     fetchStats();
-    setCurrentPage(1); // reset pagination when data changes
-    // eslint-disable-next-line
+    setCurrentPage(1);
   }, [departmentFilter, timeRange]);
 
   const handleRefresh = () => {
     fetchStats();
-    toast.info("Data refreshed", {
-      position: "top-right",
-      autoClose: 2000,
-    });
+    toast.info("Data refreshed");
   };
 
   const handleTimeRangeChange = (range) => {
     setTimeRange(range);
-    toast.info(`Showing data for ${range}`, {
-      position: "top-right",
-      autoClose: 2000,
-    });
+    toast.info(`Showing data for ${range}`);
   };
 
   const handleDepartmentFilter = (dept) => {
     setDepartmentFilter(dept);
     if (dept === "all") {
-      toast.info("Showing all departments", {
-        position: "top-right",
-        autoClose: 2000,
-      });
+      toast.info("Showing all departments");
     } else {
-      toast.info(`Filtering by ${dept} department`, {
-        position: "top-right",
-        autoClose: 2000,
-      });
+      toast.info(`Filtering by ${dept} department`);
     }
   };
 
@@ -758,19 +741,6 @@ const Analytics = () => {
           )}
         </>
       )}
-
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </div>
   );
 };
