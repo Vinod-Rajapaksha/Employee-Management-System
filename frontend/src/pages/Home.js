@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
@@ -15,7 +15,6 @@ import {
   FiUsers,
   FiTrendingUp,
 } from "react-icons/fi";
-import { useLocation , useNavigate } from "react-router-dom";
 
 function Home() {
   const [employees, setEmployees] = useState([]);
@@ -29,12 +28,11 @@ function Home() {
   });
   const location = useLocation();
   const [showGoTop, setShowGoTop] = useState(false);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   const navigate = useNavigate();
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
   useEffect(() => {
     if (
@@ -53,7 +51,6 @@ function Home() {
     const handleScroll = () => {
       setShowGoTop(window.scrollY > 100);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -102,9 +99,7 @@ function Home() {
       try {
         await axios.delete(`http://localhost:5000/employees/${id}`);
         toast.success("Employee deleted successfully");
-
         getEmployees();
-
         Swal.fire({
           title: "Deleted!",
           text: "Employee has been removed.",
@@ -123,22 +118,43 @@ function Home() {
     getEmployees();
   }, []);
 
+  // Filtered employees
   const filteredEmployees = employees.filter((emp) => {
     const matchesSearch =
       emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       emp.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       emp.jobTitle.toLowerCase().includes(searchTerm.toLowerCase());
-
     const matchesDepartment =
       filterDepartment === "all" ||
       emp.department.toLowerCase() === filterDepartment.toLowerCase();
-
     return matchesSearch && matchesDepartment;
   });
 
+  // Pagination logic
+  const totalEntries = filteredEmployees.length;
+  const totalPages = Math.ceil(totalEntries / pageSize);
+  const currentEmployees = filteredEmployees.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
+  // Page controls
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+    // Scroll to table top on page change
+    const table = document.getElementById("employee-table");
+    if (table) table.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Reset to page 1 when filters/search change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterDepartment, employees]);
+
   const departments = [
     "all",
-    ...new Set(employees.map((emp) => emp.department)),
+    ...Array.from(new Set(employees.map((emp) => emp.department))),
   ];
 
   const StatCard = ({ icon, title, value, color }) => (
@@ -242,7 +258,7 @@ function Home() {
               aria-label="Filter by department"
             >
               {departments.map((dept) => (
-                <option filter-optionskey={dept} value={dept}>
+                <option key={dept} value={dept}>
                   {dept === "all" ? "🏢 All Departments" : `🏢 ${dept}`}
                 </option>
               ))}
@@ -253,6 +269,7 @@ function Home() {
 
       {/* Employee Table */}
       <motion.div
+        id="employee-table"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
@@ -265,7 +282,7 @@ function Home() {
             </div>
             <p className="text-muted">Loading employees...</p>
           </div>
-        ) : filteredEmployees.length === 0 ? (
+        ) : totalEntries === 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -278,98 +295,144 @@ function Home() {
             <p className="text-muted">Try adjusting your search criteria</p>
           </motion.div>
         ) : (
-          <div className="table-responsive">
-            <table className="modern-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Employee</th>
-                  <th>Contact</th>
-                  <th>Position</th>
-                  <th>Department</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredEmployees.slice(0, 20).map((emp, index) => (
-                  <motion.tr
-                    key={emp._id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                  >
-                    <td className="fw-bold text-primary">{index + 1}</td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <div
-                          className="avatar-gradient me-3"
-                          style={{
-                            width: "40px",
-                            height: "40px",
-                            fontSize: "16px",
-                          }}
-                        >
-                          {emp.name.charAt(0).toUpperCase()}
+          <>
+            <div className="table-responsive">
+              <table className="modern-table rounded-0">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Employee</th>
+                    <th>Contact</th>
+                    <th>Position</th>
+                    <th>Department</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentEmployees.map((emp, index) => (
+                    <motion.tr
+                      key={emp._id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                    >
+                      <td className="fw-bold text-primary">
+                        {(currentPage - 1) * pageSize + index + 1}
+                      </td>
+                      <td>
+                        <div className="d-flex align-items-center">
+                          <div
+                            className="avatar-gradient me-3"
+                            style={{
+                              width: "40px",
+                              height: "40px",
+                              fontSize: "16px",
+                            }}
+                          >
+                            {emp.name.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <Link
+                              to={`/view/${emp._id}`}
+                              className="text-decoration-none fw-bold"
+                              style={{ color: "var(--text-color)" }}
+                            >
+                              {emp.name}
+                            </Link>
+                            <div className="text-muted small">{emp.email}</div>
+                          </div>
                         </div>
-                        <div>
+                      </td>
+                      <td>
+                        <div className="text-muted small">📧 {emp.email}</div>
+                        <div className="text-muted small">📱 {emp.phone}</div>
+                      </td>
+                      <td>
+                        <div className="fw-medium">{emp.jobTitle}</div>
+                      </td>
+                      <td>
+                        <span className="badge bg-info">{emp.department}</span>
+                      </td>
+                      <td>
+                        <div className="d-flex gap-2">
                           <Link
                             to={`/view/${emp._id}`}
-                            className="text-decoration-none fw-bold"
-                            style={{ color: "var(--text-color)" }}
+                            className="btn-modern btn-primary btn-sm"
+                            title="View Details"
                           >
-                            {emp.name}
+                            <FiEye size={14} />
                           </Link>
-                          <div className="text-muted small">{emp.email}</div>
+                          <Link
+                            to={`/edit/${emp._id}`}
+                            className="btn-modern btn-secondary btn-sm"
+                            title="Edit Employee"
+                          >
+                            <FiEdit size={14} />
+                          </Link>
+                          <button
+                            onClick={() => deleteEmployee(emp._id)}
+                            className="btn-modern btn-danger btn-sm"
+                            title="Delete Employee"
+                            aria-label={`Delete ${emp.name}`}
+                          >
+                            <FiTrash2 size={14} />
+                          </button>
                         </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="text-muted small">📧 {emp.email}</div>
-                      <div className="text-muted small">📱 {emp.phone}</div>
-                    </td>
-                    <td>
-                      <div className="fw-medium">{emp.jobTitle}</div>
-                    </td>
-                    <td>
-                      <span className="badge bg-info">{emp.department}</span>
-                    </td>
-                    <td>
-                      <div className="d-flex gap-2">
-                        <Link
-                          to={`/view/${emp._id}`}
-                          className="btn-modern btn-primary btn-sm"
-                          title="View Details"
-                        >
-                          <FiEye size={14} />
-                        </Link>
-                        <Link
-                          to={`/edit/${emp._id}`}
-                          className="btn-modern btn-secondary btn-sm"
-                          title="Edit Employee"
-                        >
-                          <FiEdit size={14} />
-                        </Link>
-                        <button
-                          onClick={() => deleteEmployee(emp._id)}
-                          className="btn-modern btn-danger btn-sm"
-                          title="Delete Employee"
-                          aria-label={`Delete ${emp.name}`}
-                        >
-                          <FiTrash2 size={14} />
-                        </button>
-                      </div>
-                    </td>
-                  </motion.tr>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {/* Pagination Controls */}
+            <div className="d-flex flex-wrap justify-content-between align-items-center px-3 py-3">
+              <div className="text-muted small mb-2">
+                {totalEntries > 0
+                  ? `Showing ${(currentPage - 1) * pageSize + 1} to ${Math.min(
+                      currentPage * pageSize,
+                      totalEntries
+                    )} of ${totalEntries} entries`
+                  : "No entries to show"}
+              </div>
+              <div className="pagination">
+                <button
+                  className={`prev-btn me-4${
+                    currentPage === 1 ? " disabled" : ""
+                  }`}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </button>
+                {Array.from({ length: totalPages }).map((_, idx) => (
+                  <button
+                    key={idx + 1}
+                    className={`page-btn${
+                      currentPage === idx + 1 ? " active" : ""
+                    }`}
+                    onClick={() => handlePageChange(idx + 1)}
+                  >
+                    {idx + 1}
+                  </button>
                 ))}
-              </tbody>
-            </table>
-          </div>
+                <button
+                  className={`next-btn ms-2${
+                    currentPage === totalPages ? " disabled" : ""
+                  }`}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </>
         )}
       </motion.div>
 
       <button
         className={`fab ${showGoTop ? "" : "fab-hidden"}`}
-        onClick={scrollToTop}
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         aria-label="Go to top"
       >
         <FiArrowUp size={24} />

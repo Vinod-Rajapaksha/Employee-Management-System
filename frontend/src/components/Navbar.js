@@ -5,7 +5,7 @@ import { FiMenu, FiSun, FiMoon, FiBell, FiSettings } from "react-icons/fi";
 
 const Navbar = ({ toggleSidebar }) => {
   const [theme, setTheme] = useState("light");
-  const [notifications] = useState(3); // Mock notification count
+  const [notifications] = useState(3);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";

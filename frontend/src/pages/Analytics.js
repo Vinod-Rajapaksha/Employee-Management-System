@@ -4,8 +4,6 @@ import {
   FiUsers,
   FiFilter,
   FiTrendingUp,
-  FiDollarSign,
-  FiCalendar,
   FiPieChart,
   FiBarChart2,
   FiRefreshCw,
@@ -50,9 +48,13 @@ const StatCard = ({ icon, title, value, color, trend, onClick, loading }) => (
         {loading ? (
           <div className="placeholder-glow">
             <h3
-              className="mb-0 fw-bold placeholder"
+              className="mb-0 fw-bold placeholder-glow"
               style={{ width: "80px", height: "32px" }}
-            ></h3>
+            >
+              <span className="placeholder col-12" style={{ height: "32px" }}>
+                &nbsp;
+              </span>
+            </h3>
           </div>
         ) : (
           <>
@@ -268,23 +270,12 @@ const Analytics = () => {
           ? data
           : data.filter((emp) => emp.department === departmentFilter);
 
-      // Calculate departments (use all departments, not filtered)
-      // const departments = new Set(data.map((emp) => emp.department));
-
       // Calculate new hires this month
       const thisMonth = new Date();
       thisMonth.setDate(1);
       const newThisMonth = filteredData.filter(
         (emp) => new Date(emp.hireDate) >= thisMonth
       ).length;
-
-      // Calculate salary metrics
-      const salaries = filteredData.map((emp) => emp.salary || 0);
-      const avgSalary =
-        salaries.length > 0
-          ? salaries.reduce((a, b) => a + b, 0) / salaries.length
-          : 0;
-      const salaryExpense = salaries.reduce((a, b) => a + b, 0);
 
       // Calculate department distribution (from filtered data for chart)
       const deptCounts = {};
@@ -318,12 +309,6 @@ const Analytics = () => {
         total: filteredData.length,
         departments: departmentsSet.size,
         newThisMonth,
-        avgSalary: parseFloat(avgSalary.toFixed(2)),
-        salaryExpense,
-        activeProjects: filteredData.reduce(
-          (sum, emp) => sum + (emp.projects?.length || 0),
-          0
-        ),
       });
 
       setEmployees(filteredData);
@@ -359,15 +344,6 @@ const Analytics = () => {
     } else {
       toast.info(`Filtering by ${dept} department`);
     }
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
   };
 
   // Filter employees by search term
@@ -465,29 +441,6 @@ const Analytics = () => {
                 value={stats.newThisMonth}
                 color="#EC4899"
                 trend={{ value: 12.8, label: "vs last month" }}
-                loading={loading}
-              />
-              <StatCard
-                icon={<FiDollarSign size={20} />}
-                title="Avg Salary"
-                value={formatCurrency(stats.avgSalary)}
-                color="#10B981"
-                trend={{ value: 3.5, label: "vs last quarter" }}
-                loading={loading}
-              />
-              <StatCard
-                icon={<FiDollarSign size={20} />}
-                title="Salary Expense"
-                value={formatCurrency(stats.salaryExpense)}
-                color="#F59E0B"
-                loading={loading}
-              />
-              <StatCard
-                icon={<FiCalendar size={20} />}
-                title="Active Projects"
-                value={stats.activeProjects}
-                color="#F43F5E"
-                trend={{ value: 8.1, label: "vs last month" }}
                 loading={loading}
               />
             </div>

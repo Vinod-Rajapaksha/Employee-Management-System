@@ -74,7 +74,10 @@ function AddEmployee() {
 
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
-    } else if (!/^\+?[\d\s\-\(\)]{10,}$/.test(formData.phone)) {
+    } else if (
+      !/^\+?[\d\s\-()]+$/.test(formData.phone) ||
+      (formData.phone.match(/\d/g) || []).length < 10
+    ) {
       newErrors.phone = "Please enter a valid phone number";
     }
 
@@ -89,7 +92,6 @@ function AddEmployee() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors({ ...errors, [name]: null });
     }
