@@ -22,7 +22,7 @@ function EditEmployee() {
     email: "",
     phone: "",
     jobTitle: "",
-    department: "Engineering",
+    department: "IT",
     hireDate: "",
   });
 
@@ -49,7 +49,7 @@ function EditEmployee() {
   }, []);
 
   const departments = [
-    "Engineering",
+    "IT",
     "Marketing",
     "Sales",
     "HR",

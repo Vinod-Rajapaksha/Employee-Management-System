@@ -21,7 +21,7 @@ function AddEmployee() {
     email: "",
     phone: "",
     jobTitle: "",
-    department: "Engineering",
+    department: "IT",
     hireDate: new Date().toISOString().split("T")[0],
   });
 
@@ -45,9 +45,8 @@ function AddEmployee() {
   }, []);
 
   const departments = [
-    "Engineering",
-    "Marketing",
     "IT",
+    "Marketing",
     "Sales",
     "HR",
     "Finance",
