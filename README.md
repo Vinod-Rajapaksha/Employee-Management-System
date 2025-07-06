@@ -12,7 +12,7 @@
 ## 🌟 Features
 
 - 👥 Add, view, edit, and delete employees  
-- 🔍 Search employees by name or job title  
+- 🔍 Search employees by name  
 - 📄 View detailed employee info  
 - 📦 Store employee data in MongoDB  
 - ⚡ RESTful API integration with Express  
@@ -27,7 +27,7 @@
 |----------------|---------------|----------|------------------|
 | React.js       | Express.js    | MongoDB  | Postman          |
 | Axios          | Node.js       | Mongoose | VS Code          |
-| Bootstrap/Tailwind | CORS     | MongoDB Compass | Git & GitHub |
+| Bootstrap      | CORS     | MongoDB Compass | Git & GitHub |
 
 ---
 
@@ -55,8 +55,8 @@ employee-management/
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/yourusername/employee-management.git
-cd employee-management
+git clone https://github.com/Vinod-Rajapaksha/Employee-Management-System.git
+cd Employee-Management-System
 ```
 
 ### 2️⃣ Backend Setup
