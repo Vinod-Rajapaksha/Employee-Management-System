@@ -12,7 +12,9 @@
 ## 🌟 Features
 
 - 👥 Add, view, edit, and delete employees  
-- 🔍 Search employees by name  
+- 🔍 Search employees by name
+- 📊 Dashboard with analytics and charts
+- 🌙 Toggle between Dark Mode / Light Mode for better user experience  
 - 📄 View detailed employee info  
 - 📦 Store employee data in MongoDB  
 - ⚡ RESTful API integration with Express  
@@ -110,8 +112,7 @@ Visit: [http://localhost:3000](http://localhost:3000)
 ## 🎯 Future Enhancements
 
 - 🔐 Admin login with JWT authentication  
-- 📸 Upload employee profile pictures  
-- 📈 Dashboard with analytics and charts  
+- 📸 Upload employee profile pictures 
 - 🌐 Deploy on Vercel & Render  
 - 📄 Export employee data to PDF/Excel  
 
