@@ -6,6 +6,8 @@
 ![MadeWith](https://img.shields.io/badge/Made%20with-JavaScript-yellow)
 
 > 🚀 A Full-Stack Employee Management System built with the MERN stack — MongoDB, Express.js, React.js, and Node.js.
+> 
+> 📽️ [Click to watch Demo Video](https://www.linkedin.com/posts/vinod-rajapaksha_mern-fullstackdeveloper-reactjs-activity-7347814142122016768-1cX-?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEWTQhABlCL5huTssw4TKtfEz7DeRMoYJmo)
 
 ---
 
